@@ -127,23 +127,18 @@ export default function Navbar() {
               gap: 2,
             }}
           >
-            <Button
-              variant="outlined"
-              sx={{
-                borderRadius: 50,
-              }}
-            >
-              Login
-            </Button>
+           
 
             <Button
-              variant="contained"
-              sx={{
-                borderRadius: 50,
-              }}
-            >
-              Get Started
-            </Button>
+  component={Link}
+  to="/choose-role"
+  variant="contained"
+  sx={{
+    borderRadius: 50,
+  }}
+>
+  Login
+</Button>
           </Box>
 
           <IconButton
