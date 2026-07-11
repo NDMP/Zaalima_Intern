@@ -6,6 +6,7 @@ import ApplicantLogin from "../pages/Applicant/Login";
 import ApplicantRegister from "../pages/Applicant/Register";
 import RoleSelection from "../pages/RoleSelection/RoleSelection";
 import RecruiterDashboard from "../pages/Recruiter/Dashboard";
+import Jobs from "../pages/Recruiter/Jobs";
 
 function AppRoutes() {
   return (
@@ -42,6 +43,10 @@ function AppRoutes() {
   path="/recruiter/dashboard"
   element={<RecruiterDashboard />}
 />  
+<Route
+  path="/recruiter/jobs"
+  element={<Jobs />}
+/>
       </Routes>
     </BrowserRouter>
   );

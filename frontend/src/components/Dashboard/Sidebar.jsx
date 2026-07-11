@@ -8,41 +8,50 @@ import {
 } from "@mui/material";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
+
 import WorkIcon from "@mui/icons-material/Work";
 import GroupIcon from "@mui/icons-material/Group";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { Link, useLocation } from "react-router-dom";
 
 const menuItems = [
   {
     title: "Dashboard",
     icon: <DashboardIcon />,
+    path: "/recruiter/dashboard",
   },
   {
     title: "Jobs",
     icon: <WorkIcon />,
+    path: "/recruiter/jobs",
   },
   {
     title: "Applicants",
     icon: <GroupIcon />,
+    path: "/recruiter/applicants",
   },
   {
     title: "AI Screening",
     icon: <SmartToyIcon />,
+    path: "/recruiter/ai-screening",
   },
   {
     title: "Analytics",
     icon: <AnalyticsIcon />,
+    path: "/recruiter/analytics",
   },
   {
     title: "Settings",
     icon: <SettingsIcon />,
+    path: "/recruiter/settings",
   },
 ];
 
 export default function Sidebar() {
+  const location = useLocation();
   return (
     <Box
       sx={{
@@ -73,8 +82,10 @@ export default function Sidebar() {
         <List>
           {menuItems.map((item, index) => (
             <ListItemButton
-              key={item.title}
-              selected={index === 0}
+  component={Link}
+  to={item.path}
+  key={item.title}
+  selected={location.pathname === item.path}
               sx={{
                 mx: 2,
                 mb: 1,
