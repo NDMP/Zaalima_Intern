@@ -2,6 +2,7 @@ import Sidebar from "../../components/Dashboard/Sidebar";
 import Topbar from "../../components/Dashboard/Topbar";
 import JobCard from "../../components/Jobs/JobCard";
 import { Button, Box } from "@mui/material";
+import { Link } from "react-router-dom";
 export default function Jobs() {
   return (
     <>
@@ -26,9 +27,13 @@ export default function Jobs() {
   >
     <h1>Jobs</h1>
 
-    <Button variant="contained">
-      + Create Job
-    </Button>
+   <Button
+  component={Link}
+  to="/recruiter/jobs/create"
+  variant="contained"
+>
+  + Create Job
+</Button>
   </Box>
 
   <JobCard />

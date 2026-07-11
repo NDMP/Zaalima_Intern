@@ -7,6 +7,7 @@ import ApplicantRegister from "../pages/Applicant/Register";
 import RoleSelection from "../pages/RoleSelection/RoleSelection";
 import RecruiterDashboard from "../pages/Recruiter/Dashboard";
 import Jobs from "../pages/Recruiter/Jobs";
+import CreateJob from "../pages/Recruiter/CreateJob";
 
 function AppRoutes() {
   return (
@@ -46,6 +47,10 @@ function AppRoutes() {
 <Route
   path="/recruiter/jobs"
   element={<Jobs />}
+/>
+<Route
+  path="/recruiter/jobs/create"
+  element={<CreateJob />}
 />
       </Routes>
     </BrowserRouter>
