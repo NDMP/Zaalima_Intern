@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Button, Container, Chip, Paper, Avatar } from '@mui/material';
 import { CheckCircle } from '@mui/icons-material';
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -43,9 +44,19 @@ export default function Hero() {
             </Typography>
             
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 5 }}>
-              <Button variant="contained" size="large" sx={{ px: 4, py: 1.5, fontSize: '1.1rem' }}>
-                Get Started →
-              </Button>
+              <Button
+  component={Link}
+  to="/choose-role"
+  variant="contained"
+  size="large"
+  sx={{
+    px: 4,
+    py: 1.5,
+    fontSize: "1.1rem",
+  }}
+>
+  Get Started →
+</Button>
               <Button variant="outlined" size="large" sx={{ px: 4, py: 1.5, fontSize: '1.1rem', borderColor: '#E2E8F0', color: '#0F172A', '&:hover': { borderColor: '#0F172A' } }}>
                 Watch Demo ▶
               </Button>

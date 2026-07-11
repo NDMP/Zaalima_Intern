@@ -1,0 +1,283 @@
+import {
+  Box,
+  Button,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+  InputAdornment,
+  IconButton,
+  Checkbox,
+  FormControlLabel,
+  Link,
+  Divider,
+} from "@mui/material";
+
+
+import EmailIcon from "@mui/icons-material/Email";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import LockIcon from "@mui/icons-material/Lock";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
+import { useState } from "react";
+
+export default function RecruiterLogin() {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        bgcolor: "#F8FAFC",
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <Container maxWidth="xs">
+        <Paper
+  elevation={0}
+  sx={{
+    p: 5,
+    borderRadius: "24px",
+    boxShadow: "0 25px 60px rgba(37,99,235,.15)",
+border: "1px solid #E2E8F0",
+  }}
+>   <Box
+  sx={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 1,
+    mb: 3,
+  }}
+>
+  <SmartToyIcon
+    color="primary"
+    sx={{
+      fontSize: 44,
+    }}
+  />
+
+  <Typography
+    variant="h5"
+    fontWeight={700}
+  >
+    TalentFlow
+  </Typography>
+</Box>
+          <Typography
+            variant="h4"
+            fontWeight={800}
+            align="center"
+            mb={1}
+          >
+            Create Account
+          </Typography>
+
+          <Typography
+color="text.secondary"
+fontWeight={500}
+>
+Recruiter Registration
+</Typography>
+<TextField
+  fullWidth
+  label="Full Name"
+  margin="normal"
+  sx={{
+    mt: 2,
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "14px",
+    },
+  }}
+/>
+
+<TextField
+  fullWidth
+  label="Company Name"
+  margin="normal"
+  sx={{
+    mt: 2,
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "14px",
+    },
+  }}
+/>
+
+         <TextField
+  fullWidth
+  label="Work Email"
+  placeholder="Enter your email"
+  margin="normal"
+  sx={{
+    mt: 2,
+
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "14px",
+
+      "&:hover fieldset": {
+        borderColor: "#2563EB",
+      },
+
+      "&.Mui-focused fieldset": {
+        borderWidth: "2px",
+        borderColor: "#2563EB",
+      },
+    },
+  }}
+  InputProps={{
+  startAdornment: (
+    <InputAdornment position="start">
+      <EmailIcon color="primary" />
+    </InputAdornment>
+  ),
+}}
+/>
+
+          <TextField
+  fullWidth
+  label="Password"
+  placeholder="Enter your password"
+  margin="dense"
+  type={showPassword ? "text" : "password"}
+  sx={{
+    mt: 3,
+    mb: 2,
+
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "14px",
+
+      "&:hover fieldset": {
+        borderColor: "#2563EB",
+      },
+
+      "&.Mui-focused fieldset": {
+        borderWidth: "2px",
+        borderColor: "#2563EB",
+      },
+    },
+  }}
+  InputProps={{
+    startAdornment: (
+  <InputAdornment position="start">
+    <LockIcon color="primary" />
+  </InputAdornment>
+),
+
+    endAdornment: (
+      <InputAdornment position="end">
+        <IconButton
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? <VisibilityOff /> : <Visibility />}
+        </IconButton>
+      </InputAdornment>
+    ),
+  }}
+/> 
+
+<TextField
+  fullWidth
+  label="Confirm Password"
+  type={showPassword ? "text" : "password"}
+  margin="normal"
+  sx={{
+    mt: 2,
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "14px",
+    },
+  }}
+  InputProps={{
+    startAdornment: (
+      <InputAdornment position="start">
+        <LockIcon color="primary" />
+      </InputAdornment>
+    ),
+  }}
+/>
+<Typography
+  variant="caption"
+  color="text.secondary"
+  sx={{ ml: 1 }}
+>
+Password must be at least 8 characters.
+</Typography>
+      
+<FormControlLabel
+  control={<Checkbox />}
+  label={
+    <Typography fontSize={14}>
+      I agree to the{" "}
+      <Link href="#" underline="hover">
+        Terms & Conditions
+      </Link>{" "}
+      and{" "}
+      <Link href="#" underline="hover">
+        Privacy Policy
+      </Link>
+    </Typography>
+  }
+/>
+          <Button
+  fullWidth
+  variant="contained"
+  size="large"
+  sx={{
+  mt: 3,
+  py: 1.7,
+  borderRadius: "14px",
+  fontWeight: 700,
+  fontSize: "1rem",
+  textTransform: "none",
+
+  boxShadow: "0 10px 30px rgba(37,99,235,.35)",
+
+  "&:hover": {
+    transform: "translateY(-2px)",
+    boxShadow: "0 18px 35px rgba(37,99,235,.45)",
+  },
+}}
+>
+  Create Account
+</Button>
+
+<Divider
+  sx={{
+    my: 3,
+    color: "#94A3B8",
+    fontWeight: 600,
+  }}
+>
+  OR
+</Divider>
+
+<Typography align="center">
+  Already have an account?
+{" "}
+  <Link
+    href="/recruiter/login"
+    underline="hover"
+    fontWeight={700}
+  >
+    Login
+  </Link>
+</Typography>
+
+<Typography
+  align="center"
+  color="text.secondary"
+  mt={4}
+  fontSize={12}
+color="text.secondary"
+>
+  © 2026 TalentFlow
+</Typography>
+
+          
+
+        </Paper>
+      </Container>
+    </Box>
+  );
+}
