@@ -84,7 +84,7 @@ export default function Navbar() {
                 fontWeight: 700,
               }}
             >
-              AI ATS
+              TalentFlow
             </Typography>
           </Box>
 
