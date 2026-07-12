@@ -1,46 +1,16 @@
-# AI Powered Applicant Tracking System (ATS)
-## Project Objective
+# React + Vite
 
-Build an AI-powered Applicant Tracking System (ATS) that allows recruiters to post jobs, applicants to apply with resumes, and uses AI to analyze resumes and rank candidates based on job descriptions.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Team Members
+Currently, two official plugins are available:
 
-- Nag (Team Lead)
-- Ankur
-- Kamal
-- Sriram
-- Sanjai
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Tech Stack
+## React Compiler
 
-Frontend
-- React
-- Tailwind CSS
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-Backend
-- Node.js
-- Express.js
+## Expanding the ESLint configuration
 
-Database
-- MongoDB
-
-AI
-- Gemini API
-- PDF Parse
-
-Storage
-- AWS S3
-
-## Features
-
-- Recruiter Authentication
-- Applicant Authentication
-- Job Posting
-- Job Search
-- Resume Upload
-- AI Resume Analysis
-- Candidate Ranking
-- Email Notifications
-- Dashboard
-Project Duration
-Month 1
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
