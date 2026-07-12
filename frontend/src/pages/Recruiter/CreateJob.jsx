@@ -1,7 +1,10 @@
 import { useState } from "react";
 import Sidebar from "../../components/Dashboard/Sidebar";
 import Topbar from "../../components/Dashboard/Topbar";
-
+import { useContext } from "react";
+import { JobContext } from "../../context/JobContext";
+import { useNavigate } from "react-router-dom";
+import {  useEffect } from "react";
 import {
   Box,
   Paper,
@@ -14,8 +17,8 @@ import {
   Button,
 } from "@mui/material";
 
-export default function CreateJob() {
-    const [jobData, setJobData] = useState({
+export default function CreateJob() { 
+  const initialJobData = {
   title: "",
   company: "",
   location: "",
@@ -31,7 +34,15 @@ export default function CreateJob() {
   deadline: "",
   workMode: "",
   aiScreening: true,
-}); 
+};
+    const [jobData, setJobData] = useState(initialJobData); 
+const {
+  jobs,
+  setJobs,
+  editingJob,
+  setEditingJob,
+} = useContext(JobContext);
+const navigate = useNavigate(); 
 const handleChange = (event) => {
   const { name, value, type, checked } = event.target;
 
@@ -40,6 +51,11 @@ const handleChange = (event) => {
     [name]: type === "checkbox" ? checked : value,
   }));
 };
+useEffect(() => {
+  if (editingJob) {
+    setJobData(editingJob);
+  }
+}, [editingJob]);
 const handleSubmit = () => {
   if (!jobData.title.trim()) {
     alert("Job Title is required");
@@ -56,8 +72,31 @@ const handleSubmit = () => {
     return;
   }
 
-  console.log(jobData);
-  alert("Job Published Successfully!");
+if (editingJob) {
+
+  const updatedJobs = jobs.map((job) =>
+    job.id === editingJob.id ? jobData : job
+  );
+
+  setJobs(updatedJobs);
+
+  setEditingJob(null);
+
+} else {
+
+  const newJob = {
+    id: Date.now(),
+    ...jobData,
+  };
+
+  setJobs([...jobs, newJob]);
+
+}
+ setJobData(initialJobData);
+
+alert("Job Published Successfully!");
+
+navigate("/recruiter/jobs");
 };
   return (
     <>
