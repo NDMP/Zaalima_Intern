@@ -8,6 +8,7 @@ import RoleSelection from "../pages/RoleSelection/RoleSelection";
 import RecruiterDashboard from "../pages/Recruiter/Dashboard";
 import Jobs from "../pages/Recruiter/Jobs";
 import CreateJob from "../pages/Recruiter/CreateJob";
+import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
 
 function AppRoutes() {
   return (
@@ -51,6 +52,10 @@ function AppRoutes() {
 <Route
   path="/recruiter/jobs/create"
   element={<CreateJob />}
+/>
+<Route
+  path="/applicant/dashboard"
+  element={<ApplicantDashboard />}
 />
       </Routes>
     </BrowserRouter>
