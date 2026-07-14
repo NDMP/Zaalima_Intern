@@ -1,11 +1,18 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const JobContext = createContext();
 
 export function JobProvider({ children }) {
 
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState(() => {
+  const savedJobs = localStorage.getItem("jobs");
+
+  return savedJobs ? JSON.parse(savedJobs) : [];
+});
 const [editingJob, setEditingJob] = useState(null);
+useEffect(() => {
+  localStorage.setItem("jobs", JSON.stringify(jobs));
+}, [jobs]);
   const deleteJob = (id) => {
   setJobs((prevJobs) =>
     prevJobs.filter((job) => job.id !== id)

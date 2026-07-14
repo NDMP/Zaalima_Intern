@@ -89,7 +89,11 @@ if (editingJob) {
     ...jobData,
   };
 
-  setJobs([...jobs, newJob]);
+  const updatedJobs = [...jobs, newJob];
+
+console.log("Updated Jobs:", updatedJobs);
+
+setJobs(updatedJobs);
 
 }
  setJobData(initialJobData);
@@ -163,58 +167,55 @@ navigate("/recruiter/jobs");
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <TextField
-                select
-                fullWidth
-                label="Employment Type"
-              >
-                <MenuItem>Full Time</MenuItem>
-                <MenuItem>Part Time</MenuItem>
-                <MenuItem>Internship</MenuItem>
-                <MenuItem>Contract</MenuItem>
-              </TextField>
+             <TextField
+  select
+  fullWidth
+  label="Employment Type"
+  name="employmentType"
+  value={jobData.employmentType}
+  onChange={handleChange}
+>
+  <MenuItem value="Full Time">Full Time</MenuItem>
+  <MenuItem value="Part Time">Part Time</MenuItem>
+  <MenuItem value="Internship">Internship</MenuItem>
+  <MenuItem value="Contract">Contract</MenuItem>
+</TextField>
             </Grid>
 
             <Grid item xs={12} md={6}>
               
             </Grid>
 
-            <Grid item xs={12} md={6}>
-              <TextField
-  fullWidth
-  label="Experience"
-  placeholder="2-4 Years"
-  name="experience"
-  value={jobData.experience}
-  onChange={handleChange}
-/>
-            </Grid>
+     <Grid item xs={12} md={4}>
+  <TextField
+    fullWidth
+    label="Minimum Salary"
+    name="minSalary"
+    value={jobData.minSalary}
+    onChange={handleChange}
+  />
+</Grid>
 
-            <TextField
-  fullWidth
-  label="Minimum Salary"
-  placeholder="400000"
-  name="minSalary"
-  value={jobData.minSalary}
-  onChange={handleChange}
-/>
+<Grid item xs={12} md={4}>
+  <TextField
+    fullWidth
+    label="Maximum Salary"
+    name="maxSalary"
+    value={jobData.maxSalary}
+    onChange={handleChange}
+  />
+</Grid>
 
-            <TextField
-  fullWidth
-  label="Maximum Salary"
-  placeholder="800000"
-  name="maxSalary"
-  value={jobData.maxSalary}
-  onChange={handleChange}
-/> 
-<TextField
-  fullWidth
-  label="Vacancies"
-  type="number"
-  name="vacancies"
-  value={jobData.vacancies}
-  onChange={handleChange}
-/>
+<Grid item xs={12} md={4}>
+  <TextField
+    fullWidth
+    label="Vacancies"
+    type="number"
+    name="vacancies"
+    value={jobData.vacancies}
+    onChange={handleChange}
+  />
+</Grid>
 
             <Grid item xs={12}>
               <TextField
@@ -253,11 +254,14 @@ navigate("/recruiter/jobs");
 
 <Grid item xs={12}>
   <TextField
-    fullWidth
-    multiline
-    rows={3}
-    label="Benefits"
-  />
+  fullWidth
+  multiline
+  rows={3}
+  label="Benefits"
+  name="benefits"
+  value={jobData.benefits}
+  onChange={handleChange}
+/>
 </Grid>
             <Grid item xs={12} sm={6}>
   <Typography

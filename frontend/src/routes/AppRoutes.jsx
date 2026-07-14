@@ -8,7 +8,11 @@ import RoleSelection from "../pages/RoleSelection/RoleSelection";
 import RecruiterDashboard from "../pages/Recruiter/Dashboard";
 import Jobs from "../pages/Recruiter/Jobs";
 import CreateJob from "../pages/Recruiter/CreateJob";
-
+import ApplicantDashboard from "../pages/Applicant/ApplicantDashboard";
+import BrowseJobs from "../pages/Applicant/BrowseJobs";
+import JobDetails from "../pages/Applicant/JobDetails";
+import ApplyJob from "../pages/Applicant/ApplyJob";
+import MyApplications from "../pages/Applicant/MyApplications";
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -51,6 +55,26 @@ function AppRoutes() {
 <Route
   path="/recruiter/jobs/create"
   element={<CreateJob />}
+/>
+<Route
+  path="/applicant/dashboard"
+  element={<ApplicantDashboard />}
+/>
+<Route
+  path="/applicant/jobs"
+  element={<BrowseJobs />}
+/>
+<Route
+  path="/applicant/jobs/:id"
+  element={<JobDetails />}
+/>
+<Route
+  path="/applicant/jobs/:id/apply"
+  element={<ApplyJob />}
+/>
+<Route
+  path="/applicant/my-applications"
+  element={<MyApplications />}
 />
       </Routes>
     </BrowserRouter>

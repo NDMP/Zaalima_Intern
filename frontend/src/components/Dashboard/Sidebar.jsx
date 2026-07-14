@@ -36,17 +36,17 @@ const menuItems = [
   {
     title: "AI Screening",
     icon: <SmartToyIcon />,
-    path: "/recruiter/ai-screening",
+   
   },
   {
     title: "Analytics",
     icon: <AnalyticsIcon />,
-    path: "/recruiter/analytics",
+   
   },
   {
     title: "Settings",
     icon: <SettingsIcon />,
-    path: "/recruiter/settings",
+    
   },
 ];
 
