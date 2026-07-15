@@ -3,40 +3,90 @@ import WorkIcon from "@mui/icons-material/Work";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonIcon from "@mui/icons-material/Person";
+import { Link } from "react-router-dom";
 
 const actions = [
-  { title: "Browse Jobs", icon: <WorkIcon /> },
-  { title: "My Applications", icon: <AssignmentIcon /> },
-  { title: "Saved Jobs", icon: <FavoriteIcon /> },
-  { title: "Profile", icon: <PersonIcon /> },
+  {
+    title: "Browse Jobs",
+    icon: <WorkIcon />,
+    path: "/applicant/jobs",
+  },
+  {
+    title: "My Applications",
+    icon: <AssignmentIcon />,
+    path: "/applicant/my-applications",
+  },
+  {
+    title: "Saved Jobs",
+    path: "",
+    icon: <FavoriteIcon />,
+  },
+  {
+    title: "Profile",
+    path: "",
+    icon: <PersonIcon />,
+  },
 ];
 
 export default function QuickActions() {
   return (
     <Grid container spacing={3} sx={{ mt: 2, mb: 5 }}>
       {actions.map((action) => (
-        <Grid size={{ xs: 12, sm: 6, md: 3 }} key={action.title}>
-          <Paper
-            elevation={0}
-            sx={{
-              p: 3,
-              borderRadius: 4,
-              textAlign: "center",
-              cursor: "pointer",
-              transition: ".3s",
-              border: "1px solid #E5E7EB",
-              "&:hover": {
-                transform: "translateY(-5px)",
-                boxShadow: "0 10px 30px rgba(0,0,0,.08)",
-              },
-            }}
-          >
-            {action.icon}
+        <Grid
+          size={{ xs: 12, sm: 6, md: 3 }}
+          key={action.title}
+        >
+          {action.path ? (
+            <Link
+              to={action.path}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                display: "block",
+              }}
+            >
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 4,
+                  textAlign: "center",
+                  cursor: "pointer",
+                  transition: ".3s",
+                  border: "1px solid #E5E7EB",
 
-            <Typography mt={2} fontWeight={600}>
-              {action.title}
-            </Typography>
-          </Paper>
+                  "&:hover": {
+                    transform: "translateY(-5px)",
+                    boxShadow: "0 10px 30px rgba(0,0,0,.08)",
+                  },
+                }}
+              >
+                {action.icon}
+
+                <Typography mt={2} fontWeight={600}>
+                  {action.title}
+                </Typography>
+              </Paper>
+            </Link>
+          ) : (
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                borderRadius: 4,
+                textAlign: "center",
+                border: "1px solid #E5E7EB",
+                opacity: 0.6,
+                cursor: "not-allowed",
+              }}
+            >
+              {action.icon}
+
+              <Typography mt={2} fontWeight={600}>
+                {action.title}
+              </Typography>
+            </Paper>
+          )}
         </Grid>
       ))}
     </Grid>
