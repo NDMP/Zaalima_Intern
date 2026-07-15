@@ -13,6 +13,7 @@ import BrowseJobs from "../pages/Applicant/BrowseJobs";
 import JobDetails from "../pages/Applicant/JobDetails";
 import ApplyJob from "../pages/Applicant/ApplyJob";
 import MyApplications from "../pages/Applicant/MyApplications";
+import Applicants from "../pages/Recruiter/Applicants";
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -75,6 +76,10 @@ function AppRoutes() {
 <Route
   path="/applicant/my-applications"
   element={<MyApplications />}
+/>
+<Route
+  path="/recruiter/applicants"
+  element={<Applicants />}
 />
       </Routes>
     </BrowserRouter>

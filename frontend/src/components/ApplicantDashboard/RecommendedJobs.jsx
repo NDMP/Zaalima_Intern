@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import {
   Paper,
   Typography,
@@ -12,8 +13,6 @@ import { JobContext } from "../../context/JobContext";
 
 export default function RecommendedJobs() {
   const { jobs } = useContext(JobContext);
-
-console.log("Applicant Jobs:", jobs);
 
   return (
     <Box mt={5}>
@@ -30,11 +29,10 @@ console.log("Applicant Jobs:", jobs);
           sx={{
             p: 4,
             textAlign: "center",
+            borderRadius: 4,
           }}
         >
-          <Typography>
-            No jobs available.
-          </Typography>
+          <Typography>No jobs available.</Typography>
         </Paper>
       ) : (
         jobs.map((job) => (
@@ -44,6 +42,11 @@ console.log("Applicant Jobs:", jobs);
               p: 3,
               mb: 3,
               borderRadius: 4,
+              border: "1px solid #E5E7EB",
+              transition: "0.3s",
+              "&:hover": {
+                boxShadow: "0 12px 30px rgba(0,0,0,.08)",
+              },
             }}
           >
             <Typography
@@ -64,10 +67,9 @@ console.log("Applicant Jobs:", jobs);
               direction="row"
               spacing={1}
               mb={2}
+              flexWrap="wrap"
             >
-              <Chip
-                label={job.location}
-              />
+              <Chip label={job.location} />
 
               <Chip
                 label={job.workMode}
@@ -80,15 +82,36 @@ console.log("Applicant Jobs:", jobs);
               />
             </Stack>
 
-            <Typography mb={2}>
+            <Typography
+              fontWeight={600}
+              mb={2}
+            >
               ₹ {job.minSalary} - ₹ {job.maxSalary}
             </Typography>
 
-            <Button
-              variant="contained"
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                mt: 2,
+              }}
             >
-              Apply Now
-            </Button>
+              <Button
+                component={Link}
+                to={`/applicant/jobs/${job.id}`}
+                variant="outlined"
+              >
+                View Details
+              </Button>
+
+              <Button
+                component={Link}
+                to={`/applicant/jobs/${job.id}/apply`}
+                variant="contained"
+              >
+                Apply Now
+              </Button>
+            </Box>
           </Paper>
         ))
       )}
