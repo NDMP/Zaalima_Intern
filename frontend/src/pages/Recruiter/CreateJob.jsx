@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { JobContext } from "../../context/JobContext";
 import { useNavigate } from "react-router-dom";
 import {  useEffect } from "react";
+import axios from "axios";
 import {
   Box,
   Paper,
@@ -37,8 +38,6 @@ export default function CreateJob() {
 };
     const [jobData, setJobData] = useState(initialJobData); 
 const {
-  jobs,
-  setJobs,
   editingJob,
   setEditingJob,
 } = useContext(JobContext);
@@ -56,7 +55,7 @@ useEffect(() => {
     setJobData(editingJob);
   }
 }, [editingJob]);
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (!jobData.title.trim()) {
     alert("Job Title is required");
     return;
@@ -72,35 +71,33 @@ const handleSubmit = () => {
     return;
   }
 
-if (editingJob) {
+  try {
+    if (editingJob) {
+      await axios.put(
+        `http://localhost:5000/api/jobs/${editingJob._id}`,
+        jobData
+      );
 
-  const updatedJobs = jobs.map((job) =>
-    job.id === editingJob.id ? jobData : job
-  );
+      alert("Job Updated Successfully!");
+      setEditingJob(null);
+    } else {
+      await axios.post(
+        "http://localhost:5000/api/jobs",
+        jobData
+      );
 
-  setJobs(updatedJobs);
+      alert("Job Published Successfully!");
+    }
 
-  setEditingJob(null);
+    setJobData(initialJobData);
 
-} else {
+    navigate("/recruiter/jobs");
+  } catch (error) {
+  console.error(error);
+  console.error(error.response);
 
-  const newJob = {
-    id: Date.now(),
-    ...jobData,
-  };
-
-  const updatedJobs = [...jobs, newJob];
-
-console.log("Updated Jobs:", updatedJobs);
-
-setJobs(updatedJobs);
-
+  alert(error.response?.data?.message || error.message);
 }
- setJobData(initialJobData);
-
-alert("Job Published Successfully!");
-
-navigate("/recruiter/jobs");
 };
   return (
     <>

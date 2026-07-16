@@ -1,16 +1,25 @@
+import { useState, useEffect } from "react";
 import Sidebar from "../../components/Dashboard/Sidebar";
 import Topbar from "../../components/Dashboard/Topbar";
 import JobCard from "../../components/Jobs/JobCard";
 import { Button, Box } from "@mui/material";
-import { useContext } from "react";
-import { JobContext } from "../../context/JobContext";
 import { Link } from "react-router-dom";
+import axios from "axios";
 export default function Jobs() {
-  const {
-  jobs,
-  deleteJob,
-  setEditingJob,
-} = useContext(JobContext);
+  const [jobs, setJobs] = useState([]);
+
+const fetchJobs = async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/jobs");
+    setJobs(res.data.jobs);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+useEffect(() => {
+  fetchJobs();
+}, []);
   return (
     <>
       <Sidebar />
@@ -56,11 +65,10 @@ export default function Jobs() {
   </Box>
 ) : (
   jobs.map((job) => (
-  <Box key={job.id} sx={{ mb: 3 }}>
+  <Box key={job._id} sx={{ mb: 3 }}>
     <JobCard
   job={job}
-  deleteJob={deleteJob}
-  setEditingJob={setEditingJob}
+  refreshJobs={fetchJobs}
 />
   </Box>
 ))
