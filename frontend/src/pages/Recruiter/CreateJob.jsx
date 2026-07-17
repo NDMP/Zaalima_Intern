@@ -5,7 +5,10 @@ import { useContext } from "react";
 import { JobContext } from "../../context/JobContext";
 import { useNavigate } from "react-router-dom";
 import {  useEffect } from "react";
-import axios from "axios";
+import api from "../../utils/api";
+//import axios from "axios";
+
+
 import {
   Box,
   Paper,
@@ -73,18 +76,31 @@ const handleSubmit = async () => {
 
   try {
     if (editingJob) {
-      await axios.put(
+      await api.put(
+        `/jobs/${editingJob._id}`,
+        jobData
+      );
+
+        {/* await axios.put(
         `http://localhost:5000/api/jobs/${editingJob._id}`,
         jobData
       );
+      */}
 
       alert("Job Updated Successfully!");
       setEditingJob(null);
     } else {
+      
+      await api.post(
+        "/jobs",
+        jobData
+      );
+        {/* 
       await axios.post(
         "http://localhost:5000/api/jobs",
         jobData
       );
+      */}
 
       alert("Job Published Successfully!");
     }
