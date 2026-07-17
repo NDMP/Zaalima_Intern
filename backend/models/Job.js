@@ -7,16 +7,77 @@ const jobSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+
     company: {
       type: String,
       required: true,
       trim: true,
     },
+
+    location: {
+      type: String,
+      default: "",
+    },
+
+    employmentType: {
+      type: String,
+      default: "",
+    },
+
+    experience: {
+      type: String,
+      default: "",
+    },
+
+    vacancies: {
+      type: Number,
+      default: 1,
+    },
+
+    minSalary: {
+      type: Number,
+      default: 0,
+    },
+
+    maxSalary: {
+      type: Number,
+      default: 0,
+    },
+
+    skills: {
+      type: String,
+      default: "",
+    },
+
     description: {
       type: String,
       required: true,
-      trim: true,
     },
+
+    requirements: {
+      type: String,
+      default: "",
+    },
+
+    benefits: {
+      type: String,
+      default: "",
+    },
+
+    deadline: {
+      type: Date,
+    },
+
+    workMode: {
+      type: String,
+      default: "",
+    },
+
+    aiScreening: {
+      type: Boolean,
+      default: true,
+    },
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -28,6 +89,4 @@ const jobSchema = new mongoose.Schema(
   }
 );
 
-const Job = mongoose.model("Job", jobSchema);
-
-export default Job;
+export default mongoose.model("Job", jobSchema);

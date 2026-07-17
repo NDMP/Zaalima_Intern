@@ -6,6 +6,7 @@ import { JobContext } from "../../context/JobContext";
 import { useNavigate } from "react-router-dom";
 import {  useEffect } from "react";
 import axios from "axios";
+import { getToken } from "../../utils/auth";
 import {
   Box,
   Paper,
@@ -71,11 +72,18 @@ const handleSubmit = async () => {
     return;
   }
 
+  const token = getToken();
+
   try {
     if (editingJob) {
       await axios.put(
         `http://localhost:5000/api/jobs/${editingJob._id}`,
-        jobData
+        jobData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       alert("Job Updated Successfully!");
@@ -83,21 +91,25 @@ const handleSubmit = async () => {
     } else {
       await axios.post(
         "http://localhost:5000/api/jobs",
-        jobData
+        jobData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       alert("Job Published Successfully!");
     }
 
     setJobData(initialJobData);
-
     navigate("/recruiter/jobs");
   } catch (error) {
-  console.error(error);
-  console.error(error.response);
+    console.error(error);
+    console.error(error.response);
 
-  alert(error.response?.data?.message || error.message);
-}
+    alert(error.response?.data?.message || error.message);
+  }
 };
   return (
     <>
@@ -114,12 +126,12 @@ const handleSubmit = async () => {
   }}
 >
         <Typography
-          variant="h4"
-          fontWeight={700}
-          mb={4}
-        >
-          Create New Job
-        </Typography>
+  variant="h4"
+  fontWeight={700}
+  mb={4}
+>
+  {editingJob ? "Update Job" : "Create New Job"}
+</Typography>
 
         <Paper
   sx={{
@@ -324,7 +336,7 @@ const handleSubmit = async () => {
   variant="contained"
   onClick={handleSubmit}
 >
-  Publish Job
+  {editingJob ? "Update Job" : "Publish Job"}
 </Button>
               </Box>
             </Grid>

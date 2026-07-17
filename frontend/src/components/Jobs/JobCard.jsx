@@ -15,7 +15,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { getToken } from "../../utils/auth";
+import { useContext } from "react";
+import { JobContext } from "../../context/JobContext";
 
 export default function JobCard({
   job,
@@ -23,6 +25,9 @@ export default function JobCard({
 }) {
 
   const navigate = useNavigate();
+  const { setEditingJob } = useContext(JobContext);
+  
+  console.log(job);
 
   return (
     <Paper
@@ -134,10 +139,16 @@ export default function JobCard({
   startIcon={<DeleteIcon />}
   onClick={async () => {
     try {
-      await axios.delete(
-        `http://localhost:5000/api/jobs/${job._id}`
-      );
+      const token = getToken();
 
+await axios.delete(
+  `http://localhost:5000/api/jobs/${job._id}`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
       alert("Job deleted successfully!");
 
       refreshJobs();

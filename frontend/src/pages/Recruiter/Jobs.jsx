@@ -5,13 +5,25 @@ import JobCard from "../../components/Jobs/JobCard";
 import { Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { getToken } from "../../utils/auth";
 export default function Jobs() {
   const [jobs, setJobs] = useState([]);
 
 const fetchJobs = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/api/jobs");
-    setJobs(res.data.jobs);
+    const token = getToken();
+
+    const res = await axios.get(
+      "http://localhost:5000/api/jobs",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(res.data);
+
+    setJobs(res.data.data);
   } catch (error) {
     console.error(error);
   }
