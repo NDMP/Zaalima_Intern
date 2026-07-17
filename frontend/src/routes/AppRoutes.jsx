@@ -14,6 +14,7 @@ import JobDetails from "../pages/Applicant/JobDetails";
 import ApplyJob from "../pages/Applicant/ApplyJob";
 import MyApplications from "../pages/Applicant/MyApplications";
 import Applicants from "../pages/Recruiter/Applicants";
+import ProtectedRoute from "./ProtectedRoute";
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -45,42 +46,20 @@ function AppRoutes() {
   path="/choose-role"
   element={<RoleSelection />}
 /> 
-<Route
-  path="/recruiter/dashboard"
-  element={<RecruiterDashboard />}
-/>  
-<Route
-  path="/recruiter/jobs"
-  element={<Jobs />}
-/>
-<Route
-  path="/recruiter/jobs/create"
-  element={<CreateJob />}
-/>
-<Route
-  path="/applicant/dashboard"
-  element={<ApplicantDashboard />}
-/>
-<Route
-  path="/applicant/jobs"
-  element={<BrowseJobs />}
-/>
-<Route
-  path="/applicant/jobs/:id"
-  element={<JobDetails />}
-/>
-<Route
-  path="/applicant/jobs/:id/apply"
-  element={<ApplyJob />}
-/>
-<Route
-  path="/applicant/my-applications"
-  element={<MyApplications />}
-/>
-<Route
-  path="/recruiter/applicants"
-  element={<Applicants />}
-/>
+        <Route element={<ProtectedRoute role="recruiter" />}>
+          <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
+          <Route path="/recruiter/jobs" element={<Jobs />} />
+          <Route path="/recruiter/jobs/create" element={<CreateJob />} />
+          <Route path="/recruiter/applicants" element={<Applicants />} />
+        </Route>
+
+        <Route element={<ProtectedRoute role="applicant" />}>
+          <Route path="/applicant/dashboard" element={<ApplicantDashboard />} />
+          <Route path="/applicant/jobs" element={<BrowseJobs />} />
+          <Route path="/applicant/jobs/:id" element={<JobDetails />} />
+          <Route path="/applicant/jobs/:id/apply" element={<ApplyJob />} />
+          <Route path="/applicant/my-applications" element={<MyApplications />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

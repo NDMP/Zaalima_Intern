@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   Link,
   Divider,
+  Alert,
 } from "@mui/material";
 
 
@@ -21,9 +22,45 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../utils/api";
+import { saveAuthSession } from "../../utils/auth";
 
 export default function RecruiterLogin() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    try {
+      setError("");
+      setLoading(true);
+
+      const { data } = await api.post("/auth/login", {
+        email,
+        password,
+      });
+
+      if (data?.user?.role !== "recruiter") {
+        setError("Only recruiter accounts can login here.");
+        return;
+      }
+
+      saveAuthSession({
+        token: data.token,
+        user: data.user,
+      });
+
+      navigate("/recruiter/dashboard", { replace: true });
+    } catch (apiError) {
+      setError(apiError?.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Box
@@ -82,6 +119,12 @@ fontWeight={500}
 Recruiter Login
 </Typography>
 
+            {error ? (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {error}
+              </Alert>
+            ) : null}
+
          <TextField
   fullWidth
   label="Email"
@@ -110,6 +153,8 @@ Recruiter Login
     </InputAdornment>
   ),
 }}
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
 />
 
           <TextField
@@ -152,6 +197,8 @@ Recruiter Login
       </InputAdornment>
     ),
   }}
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
 />
           <Box
             sx={{
@@ -191,6 +238,8 @@ Recruiter Login
   fullWidth
   variant="contained"
   size="large"
+            onClick={handleLogin}
+            disabled={loading}
   sx={{
   mt: 3,
   py: 1.7,
@@ -207,7 +256,7 @@ Recruiter Login
   },
 }}
 >
-  Login
+  {loading ? "Logging in..." : "Login"}
 </Button>
 
 <Divider
