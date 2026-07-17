@@ -27,7 +27,7 @@ const applicants = [
   },
 ];
 
-export default function RecentApplicants() {
+export default function RecentApplicants({ applicants: recentApplicants = applicants }) {
   return (
     <Paper
       elevation={0}
@@ -46,7 +46,7 @@ export default function RecentApplicants() {
         Recent Applicants
       </Typography>
 
-      {applicants.map((applicant) => (
+      {recentApplicants.map((applicant) => (
         <Box
           key={applicant.name}
           sx={{

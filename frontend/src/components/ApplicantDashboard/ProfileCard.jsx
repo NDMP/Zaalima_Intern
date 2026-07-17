@@ -1,6 +1,12 @@
 import { Paper, Avatar, Typography, Box, LinearProgress } from "@mui/material";
 
-export default function ProfileCard() {
+export default function ProfileCard({
+  name = "Applicant",
+  field = "Software Development",
+  profileCompletion = 0,
+}) {
+  const initial = name?.[0]?.toUpperCase() || "A";
+
   return (
     <Paper
       elevation={0}
@@ -19,15 +25,15 @@ export default function ProfileCard() {
             mb: 2,
           }}
         >
-          A
+          {initial}
         </Avatar>
 
         <Typography variant="h6">
-          Ankur Ojha
+          {name}
         </Typography>
 
         <Typography color="text.secondary">
-          Automation & Robotics
+          {field}
         </Typography>
 
         <Typography mt={3}>
@@ -36,7 +42,7 @@ export default function ProfileCard() {
 
         <LinearProgress
           variant="determinate"
-          value={82}
+          value={profileCompletion}
           sx={{
             mt: 1,
             height: 10,
@@ -45,7 +51,7 @@ export default function ProfileCard() {
         />
 
         <Typography mt={1}>
-          82%
+          {profileCompletion}%
         </Typography>
       </Box>
     </Paper>

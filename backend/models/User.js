@@ -1,5 +1,104 @@
 import mongoose from "mongoose";
 
+const recruiterProfileSchema = new mongoose.Schema(
+  {
+    companyName: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    designation: {
+      type: String,
+      default: "Recruiter",
+      trim: true,
+    },
+    openJobs: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    applicants: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    aiMatch: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+    hired: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    recentApplicants: {
+      type: [
+        {
+          name: String,
+          role: String,
+          score: String,
+          status: String,
+        },
+      ],
+      default: [],
+    },
+  },
+  { _id: false }
+);
+
+const applicantProfileSchema = new mongoose.Schema(
+  {
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    location: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    field: {
+      type: String,
+      default: "Software Development",
+      trim: true,
+    },
+    profileCompletion: {
+      type: Number,
+      default: 40,
+      min: 0,
+      max: 100,
+    },
+    appliedJobs: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    interviews: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    savedJobs: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    offers: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    aiInsights: {
+      type: [String],
+      default: [],
+    },
+  },
+  { _id: false }
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -25,6 +124,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["applicant", "recruiter"],
       required: true,
+    },
+
+    recruiterProfile: {
+      type: recruiterProfileSchema,
+      default: undefined,
+    },
+
+    applicantProfile: {
+      type: applicantProfileSchema,
+      default: undefined,
     },
   },
   {

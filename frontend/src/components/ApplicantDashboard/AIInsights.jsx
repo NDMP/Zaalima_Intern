@@ -1,6 +1,6 @@
 import { Paper, Typography } from "@mui/material";
 
-export default function AIInsights() {
+export default function AIInsights({ insights = [] }) {
   return (
     <Paper
       elevation={0}
@@ -14,21 +14,15 @@ export default function AIInsights() {
         AI Career Insights
       </Typography>
 
-      <Typography mt={2}>
-        • Improve React skills
-      </Typography>
-
-      <Typography>
-        • Add more projects
-      </Typography>
-
-      <Typography>
-        • Resume Score: 82/100
-      </Typography>
-
-      <Typography>
-        • Profile is 82% complete
-      </Typography>
+      {insights.length === 0 ? (
+        <Typography mt={2}>No AI insights available yet.</Typography>
+      ) : (
+        insights.map((insight) => (
+          <Typography mt={2} key={insight}>
+            • {insight}
+          </Typography>
+        ))
+      )}
     </Paper>
   );
 }

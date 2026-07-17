@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import RecruiterLogin from "../pages/Recruiter/Login";
 import RecruiterRegister from "../pages/Recruiter/Register";
@@ -21,8 +21,8 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Home />} />
 
-        <Route path="/login" element={<h1>Login Page</h1>} />
-        <Route path="/register" element={<h1>Register Page</h1>} />
+        <Route path="/login" element={<Navigate to="/choose-role" replace />} />
+        <Route path="/register" element={<Navigate to="/choose-role" replace />} />
         <Route path="/recruiter" element={<h1>Recruiter Dashboard</h1>} />
         <Route path="/applicant" element={<h1>Applicant Dashboard</h1>} />
         <Route

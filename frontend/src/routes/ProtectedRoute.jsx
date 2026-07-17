@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { getUser, isAuthenticated } from "../utils/auth";
+import { clearAuthSession, getUser, isAuthenticated } from "../utils/auth";
 
 export default function ProtectedRoute({ role }) {
   if (!isAuthenticated()) {
@@ -7,6 +7,11 @@ export default function ProtectedRoute({ role }) {
   }
 
   const user = getUser();
+
+  if (!user) {
+    clearAuthSession();
+    return <Navigate to="/choose-role" replace />;
+  }
 
   if (role && user?.role !== role) {
     return <Navigate to="/choose-role" replace />;

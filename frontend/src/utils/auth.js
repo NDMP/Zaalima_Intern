@@ -15,7 +15,17 @@ export const getToken = () => localStorage.getItem(TOKEN_KEY);
 
 export const getUser = () => {
   const value = localStorage.getItem(USER_KEY);
-  return value ? JSON.parse(value) : null;
+
+  if (!value) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    clearAuthSession();
+    return null;
+  }
 };
 
 export const isAuthenticated = () => Boolean(getToken());

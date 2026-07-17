@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   Link,
   Divider,
+  Alert,
 } from "@mui/material";
 
 
@@ -21,9 +22,63 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { useState } from "react";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import api from "../../utils/api";
+import { saveAuthSession } from "../../utils/auth";
 
-export default function RecruiterLogin() {
+export default function ApplicantRegister() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [location, setLocation] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleRegister = async () => {
+    if (!fullName || !phone || !location || !email || !password || !confirmPassword) {
+      setError("Please fill all fields");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Password and confirm password must match");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    try {
+      setError("");
+      setLoading(true);
+
+      const { data } = await api.post("/auth/register", {
+        name: fullName,
+        email,
+        password,
+        role: "applicant",
+        phone,
+        location,
+      });
+
+      saveAuthSession({
+        token: data.token,
+        user: data.user,
+      });
+
+      navigate("/applicant/dashboard", { replace: true });
+    } catch (apiError) {
+      setError(apiError?.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Box
@@ -81,6 +136,13 @@ fontWeight={500}
 >
 Applicant Registration
 </Typography>
+
+          {error ? (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          ) : null}
+
 <TextField
   fullWidth
   label="Full Name"
@@ -91,6 +153,8 @@ Applicant Registration
       borderRadius: "14px",
     },
   }}
+  value={fullName}
+  onChange={(e) => setFullName(e.target.value)}
 />
 
 <TextField
@@ -103,6 +167,8 @@ Applicant Registration
       borderRadius: "14px",
     },
   }}
+  value={phone}
+  onChange={(e) => setPhone(e.target.value)}
 />
 <TextField
   fullWidth
@@ -114,6 +180,8 @@ Applicant Registration
       borderRadius: "14px",
     },
   }}
+  value={location}
+  onChange={(e) => setLocation(e.target.value)}
 />
 
          <TextField
@@ -144,6 +212,8 @@ Applicant Registration
     </InputAdornment>
   ),
 }}
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
 />
 
           <TextField
@@ -186,6 +256,8 @@ Applicant Registration
       </InputAdornment>
     ),
   }}
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
 /> 
 
 <TextField
@@ -206,13 +278,15 @@ Applicant Registration
       </InputAdornment>
     ),
   }}
+  value={confirmPassword}
+  onChange={(e) => setConfirmPassword(e.target.value)}
 />
 <Typography
   variant="caption"
   color="text.secondary"
   sx={{ ml: 1 }}
 >
-Password must be at least 8 characters.
+Password must be at least 6 characters.
 </Typography>
       
 <FormControlLabel
@@ -234,6 +308,8 @@ Password must be at least 8 characters.
   fullWidth
   variant="contained"
   size="large"
+          onClick={handleRegister}
+          disabled={loading}
   sx={{
   mt: 3,
   py: 1.7,
@@ -250,7 +326,7 @@ Password must be at least 8 characters.
   },
 }}
 >
-  Create Account
+  {loading ? "Creating account..." : "Create Account"}
 </Button>
 
 <Divider
@@ -267,7 +343,8 @@ Password must be at least 8 characters.
   Already have an account?
 {" "}
   <Link
-    href="/recruiter/login"
+    component={RouterLink}
+    to="/applicant/login"
     underline="hover"
     fontWeight={700}
   >

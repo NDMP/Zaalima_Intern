@@ -11,8 +11,13 @@ import {
 
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import { getUser } from "../../utils/auth";
 
 export default function Topbar() {
+  const user = getUser();
+  const displayName = user?.name || "Recruiter";
+  const displayRole = user?.role || "recruiter";
+
   return (
     <AppBar
       position="fixed"
@@ -80,7 +85,7 @@ export default function Topbar() {
                 bgcolor: "#2563EB",
               }}
             >
-              A
+              {displayName[0] || "R"}
             </Avatar>
 
             <Box>
@@ -88,14 +93,14 @@ export default function Topbar() {
                 fontWeight={700}
                 fontSize={15}
               >
-                Ankur Ojha
+                {displayName}
               </Typography>
 
               <Typography
                 variant="body2"
                 color="text.secondary"
               >
-                Recruiter
+                {displayRole[0].toUpperCase() + displayRole.slice(1)}
               </Typography>
             </Box>
           </Box>

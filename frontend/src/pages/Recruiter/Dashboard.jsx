@@ -9,8 +9,12 @@ import SmartToyIcon from "@mui/icons-material/SmartToy";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RecentApplicants from "../../components/Dashboard/RecentApplicants";
 import QuickActions from "../../components/Dashboard/QuickActions";
+import { getUser } from "../../utils/auth";
 
 export default function Dashboard() {
+  const user = getUser();
+  const recruiterProfile = user?.recruiterProfile || {};
+
   return (
     <>
       <Sidebar />
@@ -30,25 +34,25 @@ export default function Dashboard() {
       marginBottom: "30px",
     }}
   >
-    Recruiter Dashboard
+    Recruiter Dashboard - {user?.name || "Recruiter"}
   </h1>
 
   <Grid container spacing={3}>
     <Grid item xs={12} md={6} lg={3}>
       <StatCard
         title="Open Jobs"
-        value="24"
+        value={recruiterProfile.openJobs ?? 0}
         icon={<WorkIcon />}
         color="#2563EB"
       />
-      <RecentApplicants />
+      <RecentApplicants applicants={recruiterProfile.recentApplicants || []} />
       <QuickActions />
     </Grid>
 
     <Grid item xs={12} md={6} lg={3}>
       <StatCard
         title="Applicants"
-        value="312"
+        value={recruiterProfile.applicants ?? 0}
         icon={<GroupIcon />}
         color="#7C3AED"
       />
@@ -57,7 +61,7 @@ export default function Dashboard() {
     <Grid item xs={12} md={6} lg={3}>
       <StatCard
         title="AI Match"
-        value="96%"
+        value={`${recruiterProfile.aiMatch ?? 0}%`}
         icon={<SmartToyIcon />}
         color="#10B981"
       />
@@ -66,7 +70,7 @@ export default function Dashboard() {
     <Grid item xs={12} md={6} lg={3}>
       <StatCard
         title="Hired"
-        value="18"
+        value={recruiterProfile.hired ?? 0}
         icon={<CheckCircleIcon />}
         color="#F59E0B"
       />

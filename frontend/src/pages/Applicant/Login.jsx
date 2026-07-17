@@ -22,7 +22,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 import { saveAuthSession } from "../../utils/auth";
 
@@ -35,6 +35,11 @@ export default function ApplicantLogin() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      setError("Email and password are required");
+      return;
+    }
+
     try {
       setError("");
       setLoading(true);
@@ -271,9 +276,10 @@ Applicant Login
 
 <Typography align="center">
   New to TalentFlow?
-Create Recruiter Account{" "}
+Create Applicant Account {" "}
   <Link
-    href="/applicant/register"
+    component={RouterLink}
+    to="/applicant/register"
     underline="hover"
     fontWeight={700}
   >

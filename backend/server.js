@@ -2,14 +2,13 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import seedInitialUsers from "./config/seedData.js";
 import indexRoutes from "./routes/index.js";
 import authRoutes from "./routes/authRoutes.js";
 import jobRoutes from "./routes/jobRoutes.js";
 
 // Load environment variables
 dotenv.config();
-
-connectDB();
 
 // Create Express application
 const app = express();
@@ -30,7 +29,18 @@ app.get("/", (req, res) => {
 // Port
 const PORT = process.env.PORT || 5000;
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await connectDB();
+        await seedInitialUsers();
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Server bootstrap failed:", error.message);
+        process.exit(1);
+    }
+};
+
+startServer();

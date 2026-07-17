@@ -17,11 +17,19 @@ import {
   Menu as MenuIcon,
 } from "@mui/icons-material";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { clearAuthSession, getUser } from "../../utils/auth";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+  const user = getUser();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleLogout = () => {
+    clearAuthSession();
+    navigate("/choose-role", { replace: true });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -131,14 +139,24 @@ export default function Navbar() {
 
             <Button
   component={Link}
-  to="/choose-role"
+  to={user ? `/${user.role}/dashboard` : "/choose-role"}
   variant="contained"
   sx={{
     borderRadius: 50,
   }}
 >
-  Login
+  {user ? "Dashboard" : "Login"}
 </Button>
+
+            {user ? (
+              <Button
+                onClick={handleLogout}
+                variant="text"
+                sx={{ borderRadius: 50 }}
+              >
+                Logout
+              </Button>
+            ) : null}
           </Box>
 
           <IconButton

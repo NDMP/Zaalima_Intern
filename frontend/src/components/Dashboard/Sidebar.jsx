@@ -15,7 +15,8 @@ import SmartToyIcon from "@mui/icons-material/SmartToy";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { clearAuthSession } from "../../utils/auth";
 
 const menuItems = [
   {
@@ -52,6 +53,13 @@ const menuItems = [
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    clearAuthSession();
+    navigate("/choose-role", { replace: true });
+  };
+
   return (
     <Box
       sx={{
@@ -80,12 +88,13 @@ export default function Sidebar() {
         </Typography>
 
         <List>
-          {menuItems.map((item, index) => (
+          {menuItems.map((item) => (
             <ListItemButton
-  component={Link}
-  to={item.path}
+  component={item.path ? Link : "button"}
+  {...(item.path ? { to: item.path } : {})}
   key={item.title}
   selected={location.pathname === item.path}
+  disabled={!item.path}
               sx={{
                 mx: 2,
                 mb: 1,
@@ -117,6 +126,7 @@ export default function Sidebar() {
 
       <Box sx={{ p: 2 }}>
         <ListItemButton
+          onClick={handleLogout}
           sx={{
             borderRadius: 2,
 

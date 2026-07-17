@@ -6,7 +6,9 @@ import {
   Chip,
 } from "@mui/material";
 
-export default function WelcomeBanner() {
+export default function WelcomeBanner({ name = "Applicant", profileCompletion = 0 }) {
+  const initial = name?.[0]?.toUpperCase() || "A";
+
   return (
     <Paper
       elevation={0}
@@ -29,7 +31,7 @@ export default function WelcomeBanner() {
             variant="h4"
             fontWeight={700}
           >
-            Welcome back, Ankur 👋
+            Welcome back, {name} 👋
           </Typography>
 
           <Typography
@@ -42,7 +44,7 @@ export default function WelcomeBanner() {
           </Typography>
 
           <Chip
-            label="Profile Strength 82%"
+            label={`Profile Strength ${profileCompletion}%`}
             sx={{
               mt: 3,
               bgcolor: "#fff",
@@ -62,7 +64,7 @@ export default function WelcomeBanner() {
             fontWeight: 700,
           }}
         >
-          A
+          {initial}
         </Avatar>
       </Box>
     </Paper>
