@@ -21,7 +21,11 @@ app.use(express.json());
 
 app.use("/api", indexRoutes);
 app.use("/api/auth", authRoutes);
+<<<<<<< HEAD
 app.use("/api/jobs", jobRoutes);
+=======
+app.use("/api/jobs", jobRoutes);    
+>>>>>>> b8df5eb263bc060dcefba1a7a908b67a8d562002
 
 // Home Route
 app.get("/", (req, res) => {

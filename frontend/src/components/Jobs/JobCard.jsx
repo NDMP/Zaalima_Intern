@@ -14,11 +14,12 @@ import PsychologyIcon from "@mui/icons-material/Psychology";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 
 export default function JobCard({
   job,
-  deleteJob,
-  setEditingJob,
+  refreshJobs,
 }) {
 
   const navigate = useNavigate();
@@ -131,7 +132,20 @@ export default function JobCard({
   variant="contained"
   color="error"
   startIcon={<DeleteIcon />}
-  onClick={() => deleteJob(job.id)}
+  onClick={async () => {
+    try {
+      await axios.delete(
+        `http://localhost:5000/api/jobs/${job._id}`
+      );
+
+      alert("Job deleted successfully!");
+
+      refreshJobs();
+    } catch (error) {
+      console.error(error);
+      alert("Delete failed");
+    }
+  }}
 >
   Delete
 </Button>
