@@ -33,12 +33,12 @@ export default function ApplicantCard({
       >
         <Box display="flex" gap={2}>
           <Avatar sx={{ bgcolor: "#2563EB" }}>
-            {application.applicantName?.charAt(0)}
+            {application.fullName?.charAt(0)}
           </Avatar>
 
           <Box>
             <Typography variant="h6" fontWeight={700}>
-              {application.applicantName}
+              {application.fullName}
             </Typography>
 
             <Typography color="text.secondary">
@@ -50,12 +50,12 @@ export default function ApplicantCard({
         <Chip
           label={application.status}
           color={
-            application.status === "Shortlisted"
-              ? "success"
-              : application.status === "Rejected"
-              ? "error"
-              : "warning"
-          }
+  application.status === "Accepted"
+    ? "success"
+    : application.status === "Rejected"
+    ? "error"
+    : "warning"
+}
         />
       </Box>
 
@@ -65,7 +65,7 @@ export default function ApplicantCard({
         </Typography>
 
         <Typography color="text.secondary">
-          {application.jobTitle}
+          {application.job?.title}
         </Typography>
       </Box>
 
@@ -85,7 +85,7 @@ export default function ApplicantCard({
         </Typography>
 
         <Typography color="text.secondary">
-          {application.appliedOn}
+          {new Date(application.createdAt).toLocaleDateString()}
         </Typography>
       </Box>
 
@@ -97,15 +97,15 @@ export default function ApplicantCard({
         <Button
           variant="contained"
           color="success"
-          onClick={() => onShortlist(application.id)}
+          onClick={() => onShortlist(application._id)}
         >
-          Shortlist
+          Accept
         </Button>
 
         <Button
           variant="outlined"
           color="error"
-          onClick={() => onReject(application.id)}
+          onClick={() => onReject(application._id)}
         >
           Reject
         </Button>

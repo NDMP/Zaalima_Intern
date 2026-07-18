@@ -85,7 +85,7 @@ export default function ApplicantJobCard({ job }) {
       >
         <Button
   component={Link}
-  to={`/applicant/jobs/${job.id}`}
+  to={`/applicant/jobs/${job._id}`}
   variant="contained"
 >
   View Details

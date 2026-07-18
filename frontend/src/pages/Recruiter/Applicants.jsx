@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -8,21 +8,58 @@ import {
 import Sidebar from "../../components/Dashboard/Sidebar";
 import Topbar from "../../components/Dashboard/Topbar";
 import ApplicantCard from "../../components/Recruiter/ApplicantCard";
-import { ApplicationContext } from "../../context/ApplicationContext";
+import axios from "axios";
+import { getToken } from "../../utils/auth";
 
 export default function Applicants() {
-  const { applications, setApplications } =
-    useContext(ApplicationContext);
+  const [applications, setApplications] = useState([]);
 
-  const updateStatus = (id, status) => {
-    const updated = applications.map((app) =>
-      app.id === id
-        ? { ...app, status }
-        : app
+  useEffect(() => {
+  const fetchApplications = async () => {
+    try {
+      const token = getToken();
+
+      const res = await axios.get(
+        "http://localhost:5000/api/applications",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setApplications(res.data.applications);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchApplications();
+}, []);
+
+  const updateStatus = async (id, status) => {
+  try {
+    const token = getToken();
+
+    await axios.patch(
+      `http://localhost:5000/api/applications/${id}/status`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
 
-    setApplications(updated);
-  };
+    setApplications((prev) =>
+      prev.map((app) =>
+        app._id === id ? { ...app, status } : app
+      )
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <>
@@ -54,14 +91,14 @@ export default function Applicants() {
           <Grid container spacing={3}>
             {applications.map((application) => (
               <Grid
-                key={application.id}
+                key={application._id}
                 size={{ xs: 12, md: 6 }}
               >
                 <ApplicantCard
                   application={application}
                   onShortlist={(id) =>
-                    updateStatus(id, "Shortlisted")
-                  }
+  updateStatus(id, "Accepted")
+}
                   onReject={(id) =>
                     updateStatus(id, "Rejected")
                   }

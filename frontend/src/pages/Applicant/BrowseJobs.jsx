@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -10,11 +10,33 @@ import {
 
 import SearchIcon from "@mui/icons-material/Search";
 
-import { JobContext } from "../../context/JobContext";
 import ApplicantJobCard from "../../components/ApplicantDashboard/ApplicantJobCard";
+import axios from "axios";
+import { getToken } from "../../utils/auth";
 
 export default function BrowseJobs() {
-  const { jobs } = useContext(JobContext);
+  const [jobs, setJobs] = useState([]);
+  const fetchJobs = async () => {
+  try {
+    const token = getToken();
+
+    const res = await axios.get(
+      "http://localhost:5000/api/jobs",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    setJobs(res.data.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+useEffect(() => {
+  fetchJobs();
+}, []);
 
   const [search, setSearch] = useState("");
   const [workMode, setWorkMode] = useState("");
@@ -126,7 +148,7 @@ export default function BrowseJobs() {
         ) : (
           filteredJobs.map((job) => (
             <Grid
-              key={job.id}
+              key={job._id}
               size={{ xs: 12, md: 6 }}
             >
               <ApplicantJobCard job={job} />
