@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
@@ -11,17 +11,14 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
-import { ApplicationContext } from "../../context/ApplicationContext";
-import { JobContext } from "../../context/JobContext";
+import axios from "axios";
+import { getToken } from "../../utils/auth";
 
 export default function ApplyJob() {
-  const { applications, setApplications } = useContext(ApplicationContext);
-  const { jobs } = useContext(JobContext);
-
   const navigate = useNavigate();
-  const { id } = useParams();
+const { id } = useParams();
 
-  const job = jobs.find((j) => String(j.id) === id);
+const [job, setJob] = useState(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -47,68 +44,89 @@ export default function ApplyJob() {
     }));
   };
 
-  const handleSubmit = () => {
-    if (!job) {
-      alert("Job not found.");
-      return;
+  useEffect(() => {
+  const fetchJob = async () => {
+    try {
+      const token = getToken();
+
+      const res = await axios.get(
+        `http://localhost:5000/api/jobs/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setJob(res.data.data);
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    if (!formData.fullName.trim()) {
-      alert("Please enter your full name");
-      return;
-    }
+  fetchJob();
+}, [id]);
 
-    if (!formData.email.trim()) {
-      alert("Please enter your email");
-      return;
-    }
+const handleSubmit = async () => {
+  if (!job) {
+    alert("Job not found.");
+    return;
+  }
 
-    if (!formData.phone.trim()) {
-      alert("Please enter your phone number");
-      return;
-    }
+  if (!formData.fullName.trim()) {
+    alert("Please enter your full name");
+    return;
+  }
 
-    if (!formData.resume) {
-      alert("Please upload your resume");
-      return;
-    }
+  if (!formData.email.trim()) {
+    alert("Please enter your email");
+    return;
+  }
 
-    if (!formData.agree) {
-      alert("Please accept the terms");
-      return;
-    }
+  if (!formData.phone.trim()) {
+    alert("Please enter your phone number");
+    return;
+  }
 
-    const newApplication = {
-      id: Date.now(),
-      jobId: job.id,
-      jobTitle: job.title,
-      company: job.company,
-      applicantName: formData.fullName,
-      email: formData.email,
-      phone: formData.phone,
-      portfolio: formData.portfolio,
-      coverLetter: formData.coverLetter,
-      resume: formData.resume.name,
-      status: "Under Review",
-      appliedOn: new Date().toLocaleDateString(),
-    };
+  if (!formData.resume) {
+    alert("Please upload your resume");
+    return;
+  }
 
-    setApplications([...applications, newApplication]);
+  if (!formData.agree) {
+    alert("Please accept the terms");
+    return;
+  }
+
+  try {
+    const token = getToken();
+
+    await axios.post(
+      "http://localhost:5000/api/applications",
+      {
+        job: job._id,
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        portfolio: formData.portfolio,
+        coverLetter: formData.coverLetter,
+        resume: formData.resume.name,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     alert("Application Submitted Successfully!");
 
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      portfolio: "",
-      coverLetter: "",
-      agree: false,
-      resume: null,
-    });
-
     navigate("/applicant/my-applications");
-  };
+  } catch (error) {
+    console.error(error);
+    alert("Failed to submit application");
+  }
+};
 
   return (
     <Box

@@ -1,4 +1,5 @@
 import express from "express";
+import { verifyToken } from "../middleware/authMiddleware.js";
 
 import {
   applyForJob,
@@ -9,16 +10,12 @@ import {
 
 const router = express.Router();
 
-// Apply for a job
-router.post("/", applyForJob);
+router.post("/", verifyToken, applyForJob);
 
-// Get all applications
-router.get("/", getApplications);
+router.get("/", verifyToken, getApplications);
 
-// Get applications for a specific job
-router.get("/job/:jobId", getApplicationsByJob);
+router.get("/job/:jobId", verifyToken, getApplicationsByJob);
 
-// Update application status
-router.patch("/:id/status", updateApplicationStatus);
+router.patch("/:id/status", verifyToken, updateApplicationStatus);
 
 export default router;

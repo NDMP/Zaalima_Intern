@@ -35,20 +35,20 @@ const menuItems = [
     path: "/recruiter/applicants",
   },
   {
-    title: "AI Screening",
-    icon: <SmartToyIcon />,
-   
-  },
-  {
-    title: "Analytics",
-    icon: <AnalyticsIcon />,
-   
-  },
-  {
-    title: "Settings",
-    icon: <SettingsIcon />,
-    
-  },
+  title: "AI Screening",
+  icon: <SmartToyIcon />,
+  path: "/recruiter/ai-screening",
+},
+{
+  title: "Analytics",
+  icon: <AnalyticsIcon />,
+  path: "/recruiter/analytics",
+},
+{
+  title: "Settings",
+  icon: <SettingsIcon />,
+  path: "/recruiter/settings",
+},
 ];
 
 export default function Sidebar() {

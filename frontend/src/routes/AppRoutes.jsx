@@ -14,6 +14,9 @@ import JobDetails from "../pages/Applicant/JobDetails";
 import ApplyJob from "../pages/Applicant/ApplyJob";
 import MyApplications from "../pages/Applicant/MyApplications";
 import Applicants from "../pages/Recruiter/Applicants";
+import Analytics from "../pages/Recruiter/Analytics";
+import AIScreening from "../pages/Recruiter/AIScreening";
+import Settings from "../pages/Recruiter/Settings";
 import ProtectedRoute from "./ProtectedRoute";
 function AppRoutes() {
   return (
@@ -46,6 +49,20 @@ function AppRoutes() {
   path="/choose-role"
   element={<RoleSelection />}
 /> 
+<Route
+  path="/recruiter/analytics"
+  element={<Analytics />}
+/>
+
+<Route
+  path="/recruiter/ai-screening"
+  element={<AIScreening />}
+/>
+
+<Route
+  path="/recruiter/settings"
+  element={<Settings />}
+/>
         <Route element={<ProtectedRoute role="recruiter" />}>
           <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
           <Route path="/recruiter/jobs" element={<Jobs />} />
