@@ -25,6 +25,11 @@ const applicationSchema = new mongoose.Schema(
       required: true,
     },
 
+    skills: {
+  type: String,
+  default: "",
+},
+
     resume: {
       type: String,
       default: "",

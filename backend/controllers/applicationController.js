@@ -3,7 +3,16 @@ import Application from "../models/Application.js";
 // Apply for a job
 export const applyForJob = async (req, res) => {
   try {
-    const application = await Application.create(req.body);
+    const application = await Application.create({
+      job: req.body.job,
+      fullName: req.body.fullName,
+      email: req.body.email,
+      phone: req.body.phone,
+      skills: req.body.skills,
+      portfolio: req.body.portfolio,
+      coverLetter: req.body.coverLetter,
+      resume: req.file ? req.file.filename : "",
+    });
 
     res.status(201).json({
       success: true,

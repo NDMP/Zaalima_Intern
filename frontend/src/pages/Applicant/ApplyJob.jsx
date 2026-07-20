@@ -21,14 +21,15 @@ const { id } = useParams();
 const [job, setJob] = useState(null);
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    portfolio: "",
-    coverLetter: "",
-    agree: false,
-    resume: null,
-  });
+  fullName: "",
+  email: "",
+  phone: "",
+  skills: "",
+  portfolio: "",
+  coverLetter: "",
+  agree: false,
+  resume: null,
+});
 
   const handleChange = (e) => {
     const { name, value, checked, type, files } = e.target;
@@ -101,20 +102,24 @@ const handleSubmit = async () => {
   try {
     const token = getToken();
 
+    const data = new FormData();
+
+    data.append("job", job._id);
+    data.append("fullName", formData.fullName);
+    data.append("email", formData.email);
+    data.append("phone", formData.phone);
+    data.append("skills", formData.skills);
+    data.append("portfolio", formData.portfolio);
+    data.append("coverLetter", formData.coverLetter);
+    data.append("resume", formData.resume);
+
     await axios.post(
       "http://localhost:5000/api/applications",
-      {
-        job: job._id,
-        fullName: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        portfolio: formData.portfolio,
-        coverLetter: formData.coverLetter,
-        resume: formData.resume.name,
-      },
+      data,
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       }
     );
@@ -127,7 +132,6 @@ const handleSubmit = async () => {
     alert("Failed to submit application");
   }
 };
-
   return (
     <Box
       sx={{
@@ -182,6 +186,17 @@ const handleSubmit = async () => {
               onChange={handleChange}
             />
           </Grid>
+
+          <Grid size={{ xs: 12 }}>
+  <TextField
+    fullWidth
+    label="Skills"
+    name="skills"
+    placeholder="e.g. React, Node.js, MongoDB, Express"
+    value={formData.skills}
+    onChange={handleChange}
+  />
+</Grid>
 
           <Grid size={{ xs: 12 }}>
             <Button
