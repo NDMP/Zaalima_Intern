@@ -1,9 +1,24 @@
 import Job from "../models/Job.js";
 import Application from "../models/Application.js";
+import mongoose from "mongoose";
+import path from "path";
+import { fileURLToPath } from "url";
+import { rankApplicants } from "../services/aiScreeningService.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadsDirectory = path.join(__dirname, "..", "uploads");
 
 export const getAIScreening = async (req, res) => {
   try {
     const { jobId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(jobId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid job ID.",
+      });
+    }
 
     const job = await Job.findById(jobId);
 
@@ -14,54 +29,46 @@ export const getAIScreening = async (req, res) => {
       });
     }
 
+    if (
+      req.user.role !== "recruiter" ||
+      job.createdBy.toString() !== req.user.id
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to access AI screening results for this job.",
+      });
+    }
+
     const applications = await Application.find({ job: jobId });
+    const rankedApplications = await rankApplicants({
+      applications,
+      job,
+      getResumePath: (application) => {
+        if (!application.resume) {
+          return "";
+        }
 
-    const requiredSkills = job.skills
-      .toLowerCase()
-      .split(",")
-      .map((skill) => skill.trim());
-
-    const rankedCandidates = applications.map((application) => {
-      const applicantSkills = (application.skills || "")
-        .toLowerCase()
-        .split(",")
-        .map((skill) => skill.trim());
-
-      const matchedSkills = requiredSkills.filter((skill) =>
-        applicantSkills.includes(skill)
-      );
-
-      const matchPercentage =
-        requiredSkills.length > 0
-          ? Math.round(
-              (matchedSkills.length / requiredSkills.length) * 100
-            )
-          : 0;
-
-      let recommendation = "Weak Match";
-
-      if (matchPercentage >= 80) {
-        recommendation = "Strong Match";
-      } else if (matchPercentage >= 50) {
-        recommendation = "Good Match";
-      }
-
-      return {
-        ...application.toObject(),
-        matchedSkills,
-        matchPercentage,
-        recommendation,
-      };
+        return path.join(
+          uploadsDirectory,
+          path.basename(application.resume)
+        );
+      },
     });
 
-    rankedCandidates.sort(
-      (a, b) => b.matchPercentage - a.matchPercentage
+    const candidates = rankedApplications.map(
+      ({ application, screening }) => ({
+        ...application.toObject(),
+        ...screening,
+        resumeExtractionError:
+          screening.resumeExtractionError ||
+          (!application.resume ? "Resume not uploaded." : ""),
+      })
     );
 
     res.json({
       success: true,
       job,
-      candidates: rankedCandidates,
+      candidates,
     });
   } catch (error) {
     console.error(error);
