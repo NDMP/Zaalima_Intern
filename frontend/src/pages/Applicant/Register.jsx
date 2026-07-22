@@ -17,6 +17,7 @@ import {
 
 import EmailIcon from "@mui/icons-material/Email";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
+import { toast } from "react-toastify";
 import LockIcon from "@mui/icons-material/Lock";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -40,19 +41,25 @@ export default function ApplicantRegister() {
 
   const handleRegister = async () => {
     if (!fullName || !phone || !location || !email || !password || !confirmPassword) {
-      setError("Please fill all fields");
+      const message = "Please fill all fields";
+setError(message);
+toast.error(message);
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Password and confirm password must match");
-      return;
-    }
+  const message = "Password and confirm password must match";
+  setError(message);
+  toast.error(message);
+  return;
+}
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
-    }
+  const message = "Password must be at least 6 characters";
+  setError(message);
+  toast.error(message);
+  return;
+}
 
     try {
       setError("");
@@ -71,10 +78,14 @@ export default function ApplicantRegister() {
         token: data.token,
         user: data.user,
       });
-
+toast.success("Registration successful!");
       navigate("/applicant/dashboard", { replace: true });
     } catch (apiError) {
-      setError(apiError?.response?.data?.message || "Registration failed");
+      const message =
+  apiError?.response?.data?.message || "Registration failed";
+
+setError(message);
+toast.error(message);
     } finally {
       setLoading(false);
     }

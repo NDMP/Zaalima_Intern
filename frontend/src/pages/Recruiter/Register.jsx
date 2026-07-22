@@ -18,6 +18,7 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import LockIcon from "@mui/icons-material/Lock";
+import { toast } from "react-toastify";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
@@ -39,19 +40,25 @@ export default function RecruiterRegister() {
 
   const handleRegister = async () => {
     if (!fullName || !companyName || !email || !password || !confirmPassword) {
-      setError("Please fill all fields");
-      return;
-    }
+  const message = "Please fill all fields";
+  setError(message);
+  toast.error(message);
+  return;
+}
 
     if (password !== confirmPassword) {
-      setError("Password and confirm password must match");
-      return;
-    }
+  const message = "Password and confirm password must match";
+  setError(message);
+  toast.error(message);
+  return;
+}
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
-    }
+  const message = "Password must be at least 6 characters";
+  setError(message);
+  toast.error(message);
+  return;
+}
 
     try {
       setError("");
@@ -70,10 +77,16 @@ export default function RecruiterRegister() {
         user: data.user,
       });
 
-      navigate("/recruiter/dashboard", { replace: true });
+      toast.success("Registration successful!");
+
+navigate("/recruiter/login");
     } catch (apiError) {
-      setError(apiError?.response?.data?.message || "Registration failed");
-    } finally {
+  const message =
+    apiError?.response?.data?.message || "Registration failed";
+
+  setError(message);
+  toast.error(message);
+} finally {
       setLoading(false);
     }
   };

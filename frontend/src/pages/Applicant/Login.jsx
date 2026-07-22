@@ -23,6 +23,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import api from "../../utils/api";
 import { saveAuthSession } from "../../utils/auth";
 
@@ -36,9 +37,11 @@ export default function ApplicantLogin() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setError("Email and password are required");
-      return;
-    }
+  const message = "Email and password are required";
+  setError(message);
+  toast.error(message);
+  return;
+}
 
     try {
       setError("");
@@ -50,19 +53,27 @@ export default function ApplicantLogin() {
       });
 
       if (data?.user?.role !== "applicant") {
-        setError("Only applicant accounts can login here.");
-        return;
-      }
+  const message = "Only applicant accounts can login here.";
+  setError(message);
+  toast.error(message);
+  return;
+}
 
       saveAuthSession({
-        token: data.token,
-        user: data.user,
-      });
+  token: data.token,
+  user: data.user,
+});
 
-      navigate("/applicant/dashboard", { replace: true });
-    } catch (apiError) {
-      setError(apiError?.response?.data?.message || "Login failed");
-    } finally {
+toast.success("Login successful!");
+
+navigate("/applicant/dashboard", { replace: true });
+} catch (apiError) {
+  const message =
+    apiError?.response?.data?.message || "Login failed";
+
+  setError(message);
+  toast.error(message);
+} finally {
       setLoading(false);
     }
   };

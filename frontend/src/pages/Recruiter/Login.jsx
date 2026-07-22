@@ -23,6 +23,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import api from "../../utils/api";
 import { saveAuthSession } from "../../utils/auth";
 
@@ -55,14 +56,20 @@ export default function RecruiterLogin() {
       }
 
       saveAuthSession({
-        token: data.token,
-        user: data.user,
-      });
+  token: data.token,
+  user: data.user,
+});
 
-      navigate("/recruiter/dashboard", { replace: true });
+toast.success("Login successful!");
+
+navigate("/recruiter/dashboard", { replace: true });
     } catch (apiError) {
-      setError(apiError?.response?.data?.message || "Login failed");
-    } finally {
+  const message =
+    apiError?.response?.data?.message || "Login failed";
+
+  setError(message);
+  toast.error(message);
+}finally {
       setLoading(false);
     }
   };
