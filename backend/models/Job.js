@@ -8,6 +8,13 @@ const jobSchema = new mongoose.Schema(
       trim: true,
     },
 
+    interviewQuestions: {
+  technical: [String],
+  coding: [String],
+  behavioral: [String],
+  hr: [String],
+},
+
     company: {
       type: String,
       required: true,

@@ -1,12 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Sidebar from "../../components/Dashboard/Sidebar";
 import Topbar from "../../components/Dashboard/Topbar";
-import { useContext } from "react";
 import { JobContext } from "../../context/JobContext";
-import { useNavigate } from "react-router-dom";
-import {  useEffect } from "react";
-import axios from "axios";
-import { getToken } from "../../utils/auth";
 import api from "../../utils/api";
 
 
@@ -41,7 +38,9 @@ export default function CreateJob() {
   workMode: "",
   aiScreening: true,
 };
-    const [jobData, setJobData] = useState(initialJobData); 
+    const [jobData, setJobData] = useState(initialJobData);
+const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
 const {
   editingJob,
   setEditingJob,
@@ -54,6 +53,11 @@ const handleChange = (event) => {
     ...prev,
     [name]: type === "checkbox" ? checked : value,
   }));
+
+  setErrors((prev) => ({
+    ...prev,
+    [name]: "",
+  }));
 };
 useEffect(() => {
   if (editingJob) {
@@ -62,21 +66,84 @@ useEffect(() => {
 }, [editingJob]);
 const handleSubmit = async () => {
   if (!jobData.title.trim()) {
-    alert("Job Title is required");
-    return;
-  }
+  setErrors((prev) => ({
+  ...prev,
+  title: "Job Title is required",
+}));
+
+toast.error("Job Title is required");
+return;
+  return;
+}
 
   if (!jobData.company.trim()) {
-    alert("Company Name is required");
-    return;
-  }
+  setErrors((prev) => ({
+    ...prev,
+    company: "Company Name is required",
+  }));
 
-  if (!jobData.location.trim()) {
-    alert("Location is required");
-    return;
-  }
+  toast.error("Company Name is required");
+  return;
+}
 
-  const token = getToken();
+if (!jobData.location.trim()) {
+  setErrors((prev) => ({
+    ...prev,
+    location: "Location is required",
+  }));
+
+  toast.error("Location is required");
+  return;
+}
+
+if (!jobData.employmentType) {
+  toast.error("Please select employment type");
+  return;
+}
+
+if (!jobData.workMode) {
+  toast.error("Please select work mode");
+  return;
+}
+
+if (!jobData.skills.trim()) {
+  setErrors((prev) => ({
+    ...prev,
+    skills: "Required skills are mandatory",
+  }));
+
+  toast.error("Required skills are mandatory");
+  return;
+}
+
+if (!jobData.description.trim()) {
+  setErrors((prev) => ({
+    ...prev,
+    description: "Job description is required",
+  }));
+
+  toast.error("Job description is required");
+  return;
+}
+
+if (!jobData.requirements.trim()) {
+  setErrors((prev) => ({
+    ...prev,
+    requirements: "Requirements are required",
+  }));
+
+  toast.error("Requirements are required");
+  return;
+}
+
+if (!jobData.deadline) {
+  toast.error("Please select application deadline");
+  return;
+}
+setLoading(true);
+
+
+  
 
   try {
     if (editingJob) {
@@ -85,18 +152,9 @@ const handleSubmit = async () => {
         jobData
       );
 
-        {/* await axios.put(
-        `http://localhost:5000/api/jobs/${editingJob._id}`,
-        jobData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      */}
+       
 
-      alert("Job Updated Successfully!");
+      toast.success("Job updated successfully!");
       setEditingJob(null);
     } else {
       
@@ -104,19 +162,9 @@ const handleSubmit = async () => {
         "/jobs",
         jobData
       );
-        {/* 
-      await axios.post(
-        "http://localhost:5000/api/jobs",
-        jobData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      */}
+        
 
-      alert("Job Published Successfully!");
+      toast.success("Job published successfully!");
     }
 
     setJobData(initialJobData);
@@ -125,8 +173,13 @@ const handleSubmit = async () => {
     console.error(error);
     console.error(error.response);
 
-    alert(error.response?.data?.message || error.message);
+    toast.error(
+  error.response?.data?.message || error.message
+);
   }
+  finally{
+    setLoading(false);
+}
 };
   return (
     <>
@@ -167,6 +220,8 @@ const handleSubmit = async () => {
   name="title"
   value={jobData.title}
   onChange={handleChange}
+  error={!!errors.title}
+  helperText={errors.title}
 />
             </Grid>
 
@@ -178,6 +233,8 @@ const handleSubmit = async () => {
   name="company"
   value={jobData.company}
   onChange={handleChange}
+  error={!!errors.company}
+  helperText={errors.company}
 />
             </Grid>
 
@@ -189,6 +246,8 @@ const handleSubmit = async () => {
   name="location"
   value={jobData.location}
   onChange={handleChange}
+  error={!!errors.location}
+  helperText={errors.location}
 />
             </Grid>
 
@@ -251,6 +310,8 @@ const handleSubmit = async () => {
   name="skills"
   value={jobData.skills}
   onChange={handleChange}
+  error={!!errors.skills}
+  helperText={errors.skills}
 />
             </Grid>
 
@@ -263,6 +324,8 @@ const handleSubmit = async () => {
   name="description"
   value={jobData.description}
   onChange={handleChange}
+  error={!!errors.description}
+  helperText={errors.description}
 />
 </Grid>
 
@@ -275,6 +338,8 @@ const handleSubmit = async () => {
   name="requirements"
   value={jobData.requirements}
   onChange={handleChange}
+  error={!!errors.requirements}
+  helperText={errors.requirements}
 />
 </Grid>
 
@@ -352,8 +417,13 @@ const handleSubmit = async () => {
                 <Button
   variant="contained"
   onClick={handleSubmit}
+  disabled={loading}
 >
-  {editingJob ? "Update Job" : "Publish Job"}
+  {loading
+    ? "Saving..."
+    : editingJob
+    ? "Update Job"
+    : "Publish Job"}
 </Button>
               </Box>
             </Grid>
