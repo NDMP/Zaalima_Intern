@@ -1,5 +1,5 @@
 import express from "express";
-import dotenv from "dotenv";
+import "dotenv/config";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -11,9 +11,10 @@ import authRoutes from "./routes/authRoutes.js";
 import jobRoutes from "./routes/jobRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import aiScreeningRoutes from "./routes/aiScreeningRoutes.js";
+import aiInterviewRoutes from "./routes/aiInterviewRoutes.js";
 
 // Load environment variables
-dotenv.config();
+
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/ai-screening", aiScreeningRoutes);
+app.use("/api/ai-interview", aiInterviewRoutes);
 
 // Home Route
 app.get("/", (req, res) => {
