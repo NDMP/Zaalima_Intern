@@ -12,6 +12,7 @@ import jobRoutes from "./routes/jobRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import aiScreeningRoutes from "./routes/aiScreeningRoutes.js";
 import aiInterviewRoutes from "./routes/aiInterviewRoutes.js";
+import settingsRoutes from "./routes/settingsRoutes.js";
 
 // Load environment variables
 
@@ -37,6 +38,7 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/ai-screening", aiScreeningRoutes);
 app.use("/api/ai-interview", aiInterviewRoutes);
+app.use("/api/settings", settingsRoutes);
 
 // Home Route
 app.get("/", (req, res) => {

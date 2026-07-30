@@ -1,5 +1,6 @@
 import { extractResumeText } from "./resumeTextExtractor.js";
 import { SKILL_CATALOG } from "./skillCatalog.js";
+import { analyzeResume } from "./geminiResumeService.js";
 
 const SKILL_DEFINITIONS = Object.values(SKILL_CATALOG).flatMap((category) =>
   category.map(([canonical, aliases]) => ({ canonical, aliases }))
@@ -149,6 +150,38 @@ export const screenApplicant = async ({
     ? Math.round((matchedSkills.length / requiredSkills.length) * 100)
     : 0;
 
+  let aiSummary = "";
+let strengths = [];
+let weaknesses = [];
+let aiRecommendation = "";
+
+try {
+  const aiResult = await analyzeResume({
+    job,
+    resumeText,
+    matchedSkills,
+    missingSkills,
+    matchPercentage,
+  });
+
+  const cleaned = aiResult
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+
+  const parsed = JSON.parse(cleaned);
+  console.log("========== GEMINI RESPONSE ==========");
+console.log(parsed);
+console.log("=====================================");
+
+  aiSummary = parsed.summary || "";
+  strengths = parsed.strengths || [];
+  weaknesses = parsed.weaknesses || [];
+  aiRecommendation = parsed.recommendation || "";
+} catch (error) {
+  console.error("Gemini Resume Analysis Error:", error.message);
+}
+
   return {
     candidateSkills,
     requiredSkills,
@@ -161,6 +194,10 @@ export const screenApplicant = async ({
       requiredSkills,
       missingSkills,
     }),
+    aiSummary,
+      strengths,
+      weaknesses,
+      aiRecommendation,
     resumeExtractionError,
   };
 };
