@@ -683,6 +683,89 @@ const downloadPDF = () => {
                   </CardContent>
                 </Card>
 
+                <Card variant="outlined">
+                   <CardContent>
+                     <Typography
+                         fontWeight={700}
+                         color="primary"
+                          mb={1}
+                       >
+                          AI Summary
+                       </Typography>
+
+                      <Typography>
+                         {selectedCandidate.aiSummary ||
+                          "No AI summary available."}
+                        </Typography>
+                     </CardContent>
+                  
+                 </Card>
+
+                 <Card variant="outlined">
+  <CardContent>
+    <Typography
+      fontWeight={700}
+      color="success.main"
+      mb={1}
+    >
+      Strengths
+    </Typography>
+
+    {selectedCandidate.strengths?.length ? (
+      selectedCandidate.strengths.map((item, index) => (
+        <Typography key={index}>
+          • {item}
+        </Typography>
+      ))
+    ) : (
+      <Typography>No strengths available.</Typography>
+    )}
+  </CardContent>
+</Card> 
+
+<Card variant="outlined">
+  <CardContent>
+    <Typography
+      fontWeight={700}
+      color="error"
+      mb={1}
+    >
+      Weaknesses
+    </Typography>
+
+    {selectedCandidate.weaknesses?.length ? (
+      selectedCandidate.weaknesses.map((item, index) => (
+        <Typography key={index}>
+          • {item}
+        </Typography>
+      ))
+    ) : (
+      <Typography>No weaknesses available.</Typography>
+    )}
+  </CardContent>
+</Card>
+<Card
+  sx={{
+    bgcolor: "#F8FAFC",
+    border: "1px solid #E2E8F0",
+  }}
+>
+  <CardContent>
+    <Typography
+      fontWeight={700}
+      color="secondary"
+      mb={1}
+    >
+      Gemini Recommendation
+    </Typography>
+
+    <Typography>
+      {selectedCandidate.aiRecommendation ||
+        "No recommendation available."}
+    </Typography>
+  </CardContent>
+</Card>
+
                 <Box>
                   <Typography fontWeight={700} mb={1}>Candidate Skills</Typography>
                   <SkillChips skills={selectedCandidate.candidateSkills} />

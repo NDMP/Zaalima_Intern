@@ -7,6 +7,43 @@ const recruiterProfileSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    website: {
+  type: String,
+  default: "",
+},
+
+address: {
+  type: String,
+  default: "",
+},
+
+description: {
+  type: String,
+  default: "",
+},
+
+logo: {
+  type: String,
+  default: "",
+},
+notifications: {
+  emailOnApplication: {
+    type: Boolean,
+    default: true,
+  },
+  aiScreeningComplete: {
+    type: Boolean,
+    default: true,
+  },
+  interviewReminder: {
+    type: Boolean,
+    default: true,
+  },
+  weeklySummary: {
+    type: Boolean,
+    default: false,
+  },
+},
     designation: {
       type: String,
       default: "Recruiter",
