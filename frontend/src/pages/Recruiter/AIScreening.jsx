@@ -42,6 +42,12 @@ import Sidebar from "../../components/Dashboard/Sidebar";
 import Topbar from "../../components/Dashboard/Topbar";
 import api from "../../utils/api";
 import { toast } from "react-toastify";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 const UPLOADS_URL = API_URL.replace(/\/api\/?$/, "/uploads");
@@ -125,6 +131,16 @@ const [loadingQuestions, setLoadingQuestions] = useState(false);
   useEffect(() => {
     fetchJobs();
   }, []);
+  const [scheduleDialog, setScheduleDialog] = useState(false);
+
+const [interviewData, setInterviewData] = useState({
+  date: "",
+  time: "",
+  mode: "Online",
+  meetLink: "",
+  location: "",
+  notes: "",
+});
 
   const fetchJobs = async () => {
     setJobsLoading(true);
@@ -170,6 +186,42 @@ const [loadingQuestions, setLoadingQuestions] = useState(false);
       setScreeningError("Something went wrong. Please try again.");
     }
   };
+  const scheduleInterview = async () => {
+  try {
+    await api.put(
+      `/applications/${selectedCandidate._id}/interview`,
+      interviewData
+    );
+
+    toast.success("Interview scheduled successfully!");
+    setSelectedCandidate((prev) => ({
+  ...prev,
+  interview: {
+    scheduled: true,
+    ...interviewData,
+    status: "Scheduled",
+  },
+}));
+
+    setScheduleDialog(false);
+
+    setInterviewData({
+      date: "",
+      time: "",
+      mode: "Online",
+      meetLink: "",
+      location: "",
+      notes: "",
+    });
+
+    // Refresh candidate list
+    fetchScreening(selectedJob);
+
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to schedule interview.");
+  }
+};
 
   const handleJobChange = (jobId) => {
     setSelectedJob(jobId);
@@ -784,12 +836,81 @@ const downloadPDF = () => {
                 </Box>
 
                 <Box display="flex" gap={2}>
+                  {selectedCandidate.interview?.scheduled && (
+  <Card variant="outlined">
+    <CardContent>
+      <Typography fontWeight={700} mb={2}>
+        📅 Scheduled Interview
+      </Typography>
+
+      <Typography>
+        <strong>Date:</strong>{" "}
+        {new Date(selectedCandidate.interview.date).toLocaleDateString()}
+      </Typography>
+
+      <Typography>
+        <strong>Time:</strong>{" "}
+        {selectedCandidate.interview.time}
+      </Typography>
+
+      <Typography>
+        <strong>Mode:</strong>{" "}
+        {selectedCandidate.interview.mode}
+      </Typography>
+
+      {selectedCandidate.interview.mode === "Online" &&
+        selectedCandidate.interview.meetLink && (
+          <Typography>
+            <strong>Meeting:</strong>{" "}
+            <a
+              href={selectedCandidate.interview.meetLink}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Join Meeting
+            </a>
+          </Typography>
+      )}
+
+      {selectedCandidate.interview.mode === "Offline" &&
+        selectedCandidate.interview.location && (
+          <Typography>
+            <strong>Location:</strong>{" "}
+            {selectedCandidate.interview.location}
+          </Typography>
+      )}
+
+      {selectedCandidate.interview.notes && (
+        <Typography mt={1}>
+          <strong>Notes:</strong>{" "}
+          {selectedCandidate.interview.notes}
+        </Typography>
+      )}
+
+      <Chip
+        sx={{ mt: 2 }}
+        color="primary"
+        label={selectedCandidate.interview.status}
+      />
+    </CardContent>
+  </Card>
+)}
                   <Button fullWidth variant="contained" color="success" onClick={() => updateStatus(selectedCandidate._id, "Accepted")}>
                     Accept
                   </Button>
                   <Button fullWidth variant="contained" color="error" onClick={() => updateStatus(selectedCandidate._id, "Rejected")}>
                     Reject
                   </Button>
+
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 2 }}
+                    onClick={() => setScheduleDialog(true)}
+                    >
+                      Schedule Interview
+                    </Button>
                 </Box>
 
                 {selectedCandidate.resume && (
@@ -807,6 +928,123 @@ const downloadPDF = () => {
           )}
         </Drawer>
       </Box>
+      <Dialog
+  open={scheduleDialog}
+  onClose={() => setScheduleDialog(false)}
+  fullWidth
+  maxWidth="sm"
+>
+  <DialogTitle>Schedule Interview</DialogTitle>
+
+  <DialogContent>
+
+    <TextField
+  fullWidth
+  margin="normal"
+  type="date"
+  value={interviewData.date}
+  onChange={(e) =>
+    setInterviewData({
+      ...interviewData,
+      date: e.target.value,
+    })
+  }
+  InputLabelProps={{ shrink: true }}
+  helperText="Interview Date"
+/>
+
+    <TextField
+  fullWidth
+  margin="normal"
+  type="time"
+  value={interviewData.time}
+  onChange={(e) =>
+    setInterviewData({
+      ...interviewData,
+      time: e.target.value,
+    })
+  }
+  InputLabelProps={{ shrink: true }}
+  helperText="Interview Time"
+/>
+
+    <TextField
+      select
+      fullWidth
+      margin="normal"
+      label="Mode"
+      value={interviewData.mode}
+      onChange={(e) =>
+        setInterviewData({
+          ...interviewData,
+          mode: e.target.value,
+        })
+      }
+    >
+      <MenuItem value="Online">Online</MenuItem>
+      <MenuItem value="Offline">Offline</MenuItem>
+    </TextField>
+
+    {interviewData.mode === "Online" ? (
+      <TextField
+        fullWidth
+        margin="normal"
+        label="Google Meet Link"
+        value={interviewData.meetLink}
+        onChange={(e) =>
+          setInterviewData({
+            ...interviewData,
+            meetLink: e.target.value,
+          })
+        }
+      />
+    ) : (
+      <TextField
+        fullWidth
+        margin="normal"
+        label="Interview Location"
+        value={interviewData.location}
+        onChange={(e) =>
+          setInterviewData({
+            ...interviewData,
+            location: e.target.value,
+          })
+        }
+      />
+    )}
+
+    <TextField
+      fullWidth
+      multiline
+      rows={4}
+      margin="normal"
+      label="Interview Notes"
+      value={interviewData.notes}
+      onChange={(e) =>
+        setInterviewData({
+          ...interviewData,
+          notes: e.target.value,
+        })
+      }
+    />
+
+  </DialogContent>
+
+  <DialogActions>
+
+    <Button onClick={() => setScheduleDialog(false)}>
+      Cancel
+    </Button>
+
+    <Button
+      variant="contained"
+      onClick={scheduleInterview}
+    >
+      Schedule
+    </Button>
+
+  </DialogActions>
+</Dialog>
     </>
   );
 }

@@ -15,6 +15,7 @@ import ProfileSettings from "../../components/Settings/ProfileSettings";
 import SecuritySettings from "../../components/Settings/SecuritySettings";
 import NotificationSettings from "../../components/Settings/NotificationSettings";
 import { getToken, saveAuthSession } from "../../utils/auth";
+import ProfileCompletionCard from "../../components/Settings/ProfileCompletionCard";
 export default function Settings() {
   const [user, setUser] = useState({
   name: "",
@@ -23,6 +24,7 @@ export default function Settings() {
   designation: "",
   website: "",
   address: "",
+  updatedAt: "",
   description: "",
    notifications: {
     emailOnApplication: true,
@@ -49,6 +51,7 @@ const fetchSettings = async () => {
 
     setUser({
   name: data.user.name,
+  updatedAt: data.user.updatedAt,
   email: data.user.email,
   companyName: data.user.recruiterProfile.companyName,
   designation: data.user.recruiterProfile.designation,
@@ -125,11 +128,15 @@ const saveSettings = async () => {
 </Tabs>
 
 {tab === 0 && (
-  <ProfileSettings
-    user={user}
-    setUser={setUser}
-    saveSettings={saveSettings}
-  />
+  <>
+    <ProfileCompletionCard user={user} />
+
+    <ProfileSettings
+      user={user}
+      setUser={setUser}
+      saveSettings={saveSettings}
+    />
+  </>
 )}
 
 {tab === 1 && (

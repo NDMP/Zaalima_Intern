@@ -17,6 +17,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { clearAuthSession } from "../../utils/auth";
+import EventIcon from "@mui/icons-material/Event";
 
 const menuItems = [
   {
@@ -44,6 +45,13 @@ const menuItems = [
   icon: <AnalyticsIcon />,
   path: "/recruiter/analytics",
 },
+
+{
+  title: "Interviews",
+  icon: <EventIcon />,
+  path: "/recruiter/interviews",
+},
+
 {
   title: "Settings",
   icon: <SettingsIcon />,
