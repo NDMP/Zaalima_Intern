@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import {
-  Avatar,
   Box,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Grid,
-  TextField,
+  Snackbar,
+  Alert,
   Typography,
 } from "@mui/material";
 import Sidebar from "../../components/Dashboard/Sidebar";
@@ -42,6 +37,11 @@ const [tab, setTab] = useState(0);
 useEffect(() => {
   fetchSettings();
 }, []);
+const [snackbar, setSnackbar] = useState({
+  open: false,
+  severity: "success",
+  message: "",
+});
 
 const fetchSettings = async () => {
   try {
@@ -72,18 +72,27 @@ const saveSettings = async () => {
   try {
     const { data } = await api.put("/settings", user);
 
-    // Update local storage
     saveAuthSession({
       token: getToken(),
       user: data.user,
     });
 
-    alert("Profile updated successfully");
+    setSnackbar({
+      open: true,
+      severity: "success",
+      message: "Profile updated successfully!",
+    });
 
-    // Reload Topbar & Dashboard
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1200);
+
   } catch (error) {
-    console.log(error);
+    setSnackbar({
+      open: true,
+      severity: "error",
+      message: "Failed to update profile.",
+    });
   }
 };
 
@@ -143,6 +152,27 @@ const saveSettings = async () => {
   />
 )}
       </Box>
+      <Snackbar
+  open={snackbar.open}
+  autoHideDuration={3000}
+  onClose={() =>
+    setSnackbar({
+      ...snackbar,
+      open: false,
+    })
+  }
+  anchorOrigin={{
+    vertical: "top",
+    horizontal: "right",
+  }}
+>
+  <Alert
+    severity={snackbar.severity}
+    variant="filled"
+  >
+    {snackbar.message}
+  </Alert>
+</Snackbar>
     </>
   );
 }
