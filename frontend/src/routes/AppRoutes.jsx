@@ -17,6 +17,7 @@ import Applicants from "../pages/Recruiter/Applicants";
 import Analytics from "../pages/Recruiter/Analytics";
 import AIScreening from "../pages/Recruiter/AIScreening";
 import Settings from "../pages/Recruiter/Settings";
+import Interviews from "../pages/Recruiter/Interviews";
 import ProtectedRoute from "./ProtectedRoute";
 function AppRoutes() {
   return (
@@ -57,6 +58,11 @@ function AppRoutes() {
 <Route
   path="/recruiter/ai-screening"
   element={<AIScreening />}
+/>
+
+<Route
+  path="/recruiter/interviews"
+  element={<Interviews />}
 />
 
 <Route

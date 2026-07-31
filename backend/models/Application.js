@@ -44,6 +44,52 @@ const applicationSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    interview: {
+  scheduled: {
+    type: Boolean,
+    default: false,
+  },
+
+  date: {
+    type: Date,
+  },
+
+  time: {
+    type: String,
+    default: "",
+  },
+
+  mode: {
+    type: String,
+    enum: ["Online", "Offline"],
+    default: "Online",
+  },
+
+  meetLink: {
+    type: String,
+    default: "",
+  },
+
+  location: {
+    type: String,
+    default: "",
+  },
+
+  notes: {
+    type: String,
+    default: "",
+  },
+
+  status: {
+    type: String,
+    enum: [
+      "Scheduled",
+      "Completed",
+      "Cancelled",
+    ],
+    default: "Scheduled",
+  },
+},
 
     status: {
       type: String,

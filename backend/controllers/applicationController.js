@@ -91,3 +91,75 @@ export const updateApplicationStatus = async (req, res) => {
     });
   }
 };
+export const scheduleInterview = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      date,
+      time,
+      mode,
+      meetLink,
+      location,
+      notes,
+    } = req.body;
+
+    const application = await Application.findById(id);
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Application not found",
+      });
+    }
+
+    application.interview = {
+      scheduled: true,
+      date,
+      time,
+      mode,
+      meetLink,
+      location,
+      notes,
+      status: "Scheduled",
+    };
+
+    await application.save();
+
+    res.json({
+      success: true,
+      message: "Interview scheduled successfully.",
+      application,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+export const getScheduledInterviews = async (req, res) => {
+  try {
+    const interviews = await Application.find({
+      "interview.scheduled": true,
+    })
+      .populate("job", "title")
+      .sort({ "interview.date": 1 });
+
+    res.json({
+      success: true,
+      interviews,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
