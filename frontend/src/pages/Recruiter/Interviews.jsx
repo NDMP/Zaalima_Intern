@@ -53,6 +53,14 @@ export default function Interviews() {
 
             <Grid item xs={12} md={6} lg={4} key={item._id}>
 
+              <Typography
+   variant="body1"
+  color="text.secondary"
+  sx={{ mb: 3 }}
+>
+  Total Scheduled Interviews: <strong>{interviews.length}</strong>
+</Typography>
+
               <Card>
 
                 <CardContent>
