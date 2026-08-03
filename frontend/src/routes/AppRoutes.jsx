@@ -86,6 +86,12 @@ function AppRoutes() {
 
   <Route path="/applicant/profile" element={<Profile />} />
 </Route>
+<Route element={<ProtectedRoute role="recruiter" />}>
+  <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
+  <Route path="/recruiter/jobs" element={<Jobs />} />
+  <Route path="/recruiter/jobs/create" element={<CreateJob />} />
+  <Route path="/recruiter/applicants" element={<Applicants />} />
+</Route>
       </Routes>
     </BrowserRouter>
   );
