@@ -19,6 +19,8 @@ import AIScreening from "../pages/Recruiter/AIScreening";
 import Settings from "../pages/Recruiter/Settings";
 import Interviews from "../pages/Recruiter/Interviews";
 import ProtectedRoute from "./ProtectedRoute";
+import SavedJobs from "../pages/Applicant/SavedJobs";
+import Profile from "../pages/Applicant/Profile";
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -69,20 +71,21 @@ function AppRoutes() {
   path="/recruiter/settings"
   element={<Settings />}
 />
-        <Route element={<ProtectedRoute role="recruiter" />}>
-          <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
-          <Route path="/recruiter/jobs" element={<Jobs />} />
-          <Route path="/recruiter/jobs/create" element={<CreateJob />} />
-          <Route path="/recruiter/applicants" element={<Applicants />} />
-        </Route>
-
         <Route element={<ProtectedRoute role="applicant" />}>
-          <Route path="/applicant/dashboard" element={<ApplicantDashboard />} />
-          <Route path="/applicant/jobs" element={<BrowseJobs />} />
-          <Route path="/applicant/jobs/:id" element={<JobDetails />} />
-          <Route path="/applicant/jobs/:id/apply" element={<ApplyJob />} />
-          <Route path="/applicant/my-applications" element={<MyApplications />} />
-        </Route>
+  <Route path="/applicant/dashboard" element={<ApplicantDashboard />} />
+
+  <Route path="/applicant/jobs" element={<BrowseJobs />} />
+
+  <Route path="/applicant/jobs/:id" element={<JobDetails />} />
+
+  <Route path="/applicant/jobs/:id/apply" element={<ApplyJob />} />
+
+  <Route path="/applicant/my-applications" element={<MyApplications />} />
+
+  <Route path="/applicant/saved-jobs" element={<SavedJobs />} />
+
+  <Route path="/applicant/profile" element={<Profile />} />
+</Route>
       </Routes>
     </BrowserRouter>
   );

@@ -97,6 +97,45 @@ const applicantProfileSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    bio: {
+  type: String,
+  default: "",
+},
+
+portfolio: {
+  type: String,
+  default: "",
+},
+
+linkedin: {
+  type: String,
+  default: "",
+},
+
+github: {
+  type: String,
+  default: "",
+},
+
+education: {
+  type: String,
+  default: "",
+},
+
+experience: {
+  type: String,
+  default: "",
+},
+
+skills: {
+  type: String,
+  default: "",
+},
+
+resume: {
+  type: String,
+  default: "",
+},
     field: {
       type: String,
       default: "Software Development",
@@ -123,6 +162,13 @@ const applicantProfileSchema = new mongoose.Schema(
       default: 0,
       min: 0,
     },
+    
+    savedJobIds: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Job",
+  },
+],
     offers: {
       type: Number,
       default: 0,

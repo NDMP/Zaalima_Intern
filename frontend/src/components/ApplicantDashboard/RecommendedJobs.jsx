@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import {  useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Paper,
@@ -7,20 +7,74 @@ import {
   Button,
   Chip,
   Stack,
+  IconButton,
 } from "@mui/material";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { toast } from "react-toastify";
 
-import { JobContext } from "../../context/JobContext";
+import api from "../../utils/api";
+
 
 export default function RecommendedJobs() {
-  const { jobs } = useContext(JobContext);
+  const [jobs, setJobs] = useState([]);
+
+useEffect(() => {
+  fetchJobs();
+  fetchSavedJobs();
+}, []);
+
+const fetchJobs = async () => {
+  try {
+    const res = await api.get("/jobs");
+    setJobs(res.data.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+  const [savedJobs, setSavedJobs] = useState([]);
+
+  useEffect(() => {
+    fetchSavedJobs();
+  }, []);
+
+  const fetchSavedJobs = async () => {
+    try {
+      const res = await api.get("/jobs/saved");
+
+      setSavedJobs(res.data.jobs.map((job) => job._id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const toggleSaveJob = async (jobId) => {
+    try {
+      if (savedJobs.includes(jobId)) {
+        await api.delete(`/jobs/${jobId}/save`);
+
+        setSavedJobs((prev) =>
+          prev.filter((id) => id !== jobId)
+        );
+
+        toast.success("Removed from Saved Jobs");
+      } else {
+        await api.post(`/jobs/${jobId}/save`);
+
+        setSavedJobs((prev) => [...prev, jobId]);
+
+        toast.success("Job Saved");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
 
   return (
     <Box mt={5}>
-      <Typography
-        variant="h5"
-        fontWeight={700}
-        mb={3}
-      >
+      <Typography variant="h5" fontWeight={700} mb={3}>
         Recommended Jobs
       </Typography>
 
@@ -37,7 +91,7 @@ export default function RecommendedJobs() {
       ) : (
         jobs.map((job) => (
           <Paper
-            key={job.id}
+            key={job._id}
             sx={{
               p: 3,
               mb: 3,
@@ -49,17 +103,11 @@ export default function RecommendedJobs() {
               },
             }}
           >
-            <Typography
-              variant="h6"
-              fontWeight={700}
-            >
+            <Typography variant="h6" fontWeight={700}>
               {job.title}
             </Typography>
 
-            <Typography
-              color="text.secondary"
-              mb={2}
-            >
+            <Typography color="text.secondary" mb={2}>
               {job.company}
             </Typography>
 
@@ -82,35 +130,46 @@ export default function RecommendedJobs() {
               />
             </Stack>
 
-            <Typography
-              fontWeight={600}
-              mb={2}
-            >
+            <Typography fontWeight={600} mb={2}>
               ₹ {job.minSalary} - ₹ {job.maxSalary}
             </Typography>
 
             <Box
               sx={{
                 display: "flex",
-                gap: 2,
+                justifyContent: "space-between",
+                alignItems: "center",
                 mt: 2,
               }}
             >
-              <Button
-                component={Link}
-                to={`/applicant/jobs/${job.id}`}
-                variant="outlined"
-              >
-                View Details
-              </Button>
+              <Box display="flex" gap={2}>
+                <Button
+                  component={Link}
+                  to={`/applicant/jobs/${job._id}`}
+                  variant="outlined"
+                >
+                  View Details
+                </Button>
 
-              <Button
-                component={Link}
-                to={`/applicant/jobs/${job.id}/apply`}
-                variant="contained"
+                <Button
+                  component={Link}
+                  to={`/applicant/jobs/${job._id}/apply`}
+                  variant="contained"
+                >
+                  Apply Now
+                </Button>
+              </Box>
+
+              <IconButton
+                color="error"
+                onClick={() => toggleSaveJob(job._id)}
               >
-                Apply Now
-              </Button>
+                {savedJobs.includes(job._id) ? (
+                  <FavoriteIcon />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
+              </IconButton>
             </Box>
           </Paper>
         ))

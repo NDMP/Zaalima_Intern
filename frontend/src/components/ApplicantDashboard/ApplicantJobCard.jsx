@@ -12,8 +12,57 @@ import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import api from "../../utils/api";
+import { toast } from "react-toastify";
 
 export default function ApplicantJobCard({ job }) {
+
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+  checkSaved();
+}, []);
+
+const checkSaved = async () => {
+  try {
+    const res = await api.get("/jobs/saved");
+
+    const found = res.data.jobs.find(
+      (item) => item._id === job._id
+    );
+
+    setSaved(!!found);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const toggleSaveJob = async () => {
+  console.log(job);
+  try {
+    if (saved) {
+      await api.delete(`/jobs/${job._id}/save`);
+
+      setSaved(false);
+
+      toast.success("Removed from Saved Jobs");
+    } else {
+      await api.post(`/jobs/${job._id}/save`);
+
+      setSaved(true);
+
+      toast.success("Job Saved");
+    }
+  } catch (err) {
+  console.log(err.response?.data);
+  console.log(err);
+  toast.error(err.response?.data?.message || "Something went wrong");
+}
+};
   return (
     <Paper
       elevation={0}
@@ -91,12 +140,16 @@ export default function ApplicantJobCard({ job }) {
   View Details
 </Button>
 
-        <Button
-          variant="outlined"
-          startIcon={<BookmarkBorderIcon />}
-        >
-          Save Job
-        </Button>
+        <IconButton
+  color="error"
+  onClick={toggleSaveJob}
+>
+  {saved ? (
+    <FavoriteIcon />
+  ) : (
+    <FavoriteBorderIcon />
+  )}
+</IconButton>
       </Box>
     </Paper>
   );

@@ -20,10 +20,11 @@ const actions = [
     title: "Saved Jobs",
     path: "",
     icon: <FavoriteIcon />,
+    path: "/applicant/saved-jobs"
   },
   {
     title: "Profile",
-    path: "",
+    path: "/applicant/profile",
     icon: <PersonIcon />,
   },
 ];

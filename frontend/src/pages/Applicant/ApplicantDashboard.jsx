@@ -7,10 +7,31 @@ import RecommendedJobs from "../../components/ApplicantDashboard/RecommendedJobs
 import AIInsights from "../../components/ApplicantDashboard/AIInsights";
 import ProfileCard from "../../components/ApplicantDashboard/ProfileCard";
 import { getUser } from "../../utils/auth";
+import { useEffect, useState } from "react";
+import api from "../../utils/api";
+import UpcomingInterviewCard from "../../components/ApplicantDashboard/UpcomingInterviewCard";
 
 export default function ApplicantDashboard() {
   const user = getUser();
   const applicantProfile = user?.applicantProfile || {};
+  useEffect(() => {
+  fetchUpcomingInterview();
+}, []);
+
+const fetchUpcomingInterview = async () => {
+  console.log("Fetching interview...");
+
+  try {
+    const res = await api.get("/applications/my-interview");
+
+    console.log(res.data);
+
+    setUpcomingInterview(res.data.interview);
+  } catch (error) {
+    console.log(error);
+  }
+};
+  const [upcomingInterview, setUpcomingInterview] = useState(null);
 
   return (
     <Box
@@ -28,6 +49,9 @@ export default function ApplicantDashboard() {
 
       {/* Quick Actions */}
       <QuickActions />
+      <UpcomingInterviewCard
+  interview={upcomingInterview}
+/>
 
       {/* Statistics */}
       <Grid container spacing={3} sx={{ mb: 5 }}>
