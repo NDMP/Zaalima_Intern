@@ -28,16 +28,6 @@ export const getRecruiterSettings = async (req, res) => {
 
 export const updateRecruiterSettings = async (req, res) => {
   try {
-    const {
-  name,
-  email,
-  companyName,
-  designation,
-  website,
-  address,
-  description,
-  notifications,
-} = req.body;
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -47,17 +37,48 @@ export const updateRecruiterSettings = async (req, res) => {
       });
     }
 
-    user.name = name;
-    user.email = email;
+    // Recruiter
+    if (user.role === "recruiter") {
+      const {
+        name,
+        email,
+        companyName,
+        designation,
+        website,
+        address,
+        description,
+        notifications,
+      } = req.body;
 
-    user.recruiterProfile.companyName = companyName;
-    user.recruiterProfile.designation = designation;
-    user.recruiterProfile.website = website;
-user.recruiterProfile.address = address;
-user.recruiterProfile.description = description;
-if (notifications) {
-  user.recruiterProfile.notifications = notifications;
-}
+      user.name = name;
+      user.email = email;
+
+      user.recruiterProfile.companyName = companyName;
+      user.recruiterProfile.designation = designation;
+      user.recruiterProfile.website = website;
+      user.recruiterProfile.address = address;
+      user.recruiterProfile.description = description;
+
+      if (notifications) {
+        user.recruiterProfile.notifications = notifications;
+      }
+    }
+
+    // Applicant
+    if (user.role === "applicant") {
+      user.name = req.body.name || user.name;
+
+      user.applicantProfile.phone = req.body.phone || "";
+      user.applicantProfile.location = req.body.location || "";
+      user.applicantProfile.bio = req.body.bio || "";
+      user.applicantProfile.portfolio = req.body.portfolio || "";
+      user.applicantProfile.linkedin = req.body.linkedin || "";
+      user.applicantProfile.github = req.body.github || "";
+      user.applicantProfile.education = req.body.education || "";
+      user.applicantProfile.experience = req.body.experience || "";
+      user.applicantProfile.skills = req.body.skills || "";
+      user.applicantProfile.resume = req.body.resume || "";
+    }
 
     await user.save();
 
@@ -73,6 +94,8 @@ if (notifications) {
     });
   }
 };
+
+
 export const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;

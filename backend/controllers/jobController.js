@@ -1,4 +1,5 @@
 import Job from "../models/Job.js";
+import User from "../models/User.js";
 
 export const createJob = async (req, res) => {
   try {
@@ -152,6 +153,80 @@ export const updateJob = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: error.message,
+    });
+  }
+};
+
+export const saveJob = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user.applicantProfile.savedJobIds.includes(req.params.id)) {
+      user.applicantProfile.savedJobIds.push(req.params.id);
+      user.applicantProfile.savedJobs =
+        user.applicantProfile.savedJobIds.length;
+
+      await user.save();
+    }
+
+    res.json({
+      success: true,
+      message: "Job saved successfully.",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+export const removeSavedJob = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    user.applicantProfile.savedJobIds =
+      user.applicantProfile.savedJobIds.filter(
+        (job) => job.toString() !== req.params.id
+      );
+
+    user.applicantProfile.savedJobs =
+      user.applicantProfile.savedJobIds.length;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Saved job removed.",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+export const getSavedJobs = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate(
+      "applicantProfile.savedJobIds"
+    );
+
+    res.json({
+      success: true,
+      jobs: user.applicantProfile.savedJobIds,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
     });
   }
 };

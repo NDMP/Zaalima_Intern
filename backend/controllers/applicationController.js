@@ -1,4 +1,5 @@
 import Application from "../models/Application.js";
+import User from "../models/User.js";
 
 // Apply for a job
 export const applyForJob = async (req, res) => {
@@ -149,10 +150,43 @@ export const getScheduledInterviews = async (req, res) => {
     })
       .populate("job", "title")
       .sort({ "interview.date": 1 });
+      console.log("Interview found:", interview);
 
     res.json({
       success: true,
       interviews,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+
+export const getMyUpcomingInterview = async (req, res) => {
+  try {
+    console.log("Logged in user:", req.user);
+
+    const user = await User.findById(req.user.id);
+
+    console.log("User Email:", user.email);
+
+    const interview = await Application.findOne({
+      email: user.email,
+      "interview.scheduled": true,
+    })
+      .populate("job", "title company")
+      .sort({ "interview.date": 1 });
+
+    console.log("Interview:", interview);
+
+    res.json({
+      success: true,
+      interview,
     });
   } catch (error) {
     console.error(error);

@@ -10,6 +10,7 @@ import {
   updateApplicationStatus,
   scheduleInterview,
   getScheduledInterviews,
+  getMyUpcomingInterview,
 } from "../controllers/applicationController.js";
 
 const router = express.Router();
@@ -25,6 +26,12 @@ router.get(
   "/interviews/all",
   verifyToken,
   getScheduledInterviews
+);
+
+router.get(
+  "/my-interview",
+  verifyToken,
+  getMyUpcomingInterview
 );
 
 // Then dynamic routes
