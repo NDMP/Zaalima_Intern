@@ -25,11 +25,17 @@ export default function Topbar() {
       sx={{
         width: "calc(100% - 260px)",
         ml: "260px",
+<<<<<<< HEAD
         bgcolor: "rgba(255,255,255,0.9)",
         color: "#0F172A",
         borderBottom: "1px solid #E5E7EB",
         backdropFilter: "blur(16px)",
         boxShadow: "0 12px 30px rgba(15, 23, 42, 0.06)",
+=======
+        bgcolor: "#FFFFFF",
+        color: "#0F172A",
+        borderBottom: "1px solid #E5E7EB",
+>>>>>>> origin/main
       }}
     >
       <Toolbar
@@ -47,10 +53,16 @@ export default function Topbar() {
             alignItems: "center",
             bgcolor: "#F8FAFC",
             px: 2,
+<<<<<<< HEAD
             py: 0.75,
             borderRadius: "999px",
             width: 350,
             border: "1px solid #E2E8F0",
+=======
+            py: 0.5,
+            borderRadius: "12px",
+            width: 350,
+>>>>>>> origin/main
           }}
         >
           <SearchIcon sx={{ color: "#64748B", mr: 1 }} />

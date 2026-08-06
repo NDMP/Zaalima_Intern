@@ -54,6 +54,7 @@ export default function QuickActions() {
                   textAlign: "center",
                   cursor: "pointer",
                   transition: ".3s",
+<<<<<<< HEAD
                   border: "1px solid #E2E8F0",
                   background: "linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)",
                   boxShadow: "0 12px 30px rgba(15, 23, 42, 0.04)",
@@ -61,6 +62,13 @@ export default function QuickActions() {
                     transform: "translateY(-5px)",
                     boxShadow: "0 18px 40px rgba(37, 99, 235, 0.12)",
                     borderColor: "#93C5FD",
+=======
+                  border: "1px solid #E5E7EB",
+
+                  "&:hover": {
+                    transform: "translateY(-5px)",
+                    boxShadow: "0 10px 30px rgba(0,0,0,.08)",
+>>>>>>> origin/main
                   },
                 }}
               >

@@ -13,12 +13,21 @@ export default function WelcomeBanner({ name = "Applicant", profileCompletion = 
     <Paper
       elevation={0}
       sx={{
+<<<<<<< HEAD
         p: { xs: 3, md: 4 },
         mb: 4,
         borderRadius: 4,
         background: "linear-gradient(135deg, #2563EB 0%, #4F46E5 100%)",
         color: "#fff",
         boxShadow: "0 24px 70px rgba(37, 99, 235, 0.25)",
+=======
+        p: 4,
+        mb: 4,
+        borderRadius: 5,
+        background:
+          "linear-gradient(135deg,#2563EB,#4F46E5)",
+        color: "#fff",
+>>>>>>> origin/main
       }}
     >
       <Box

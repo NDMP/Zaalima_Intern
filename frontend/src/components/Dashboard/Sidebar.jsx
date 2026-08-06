@@ -5,11 +5,18 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+<<<<<<< HEAD
   Divider,
   Chip,
 } from "@mui/material";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
+=======
+} from "@mui/material";
+
+import DashboardIcon from "@mui/icons-material/Dashboard";
+
+>>>>>>> origin/main
 import WorkIcon from "@mui/icons-material/Work";
 import GroupIcon from "@mui/icons-material/Group";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
@@ -74,7 +81,11 @@ export default function Sidebar() {
       sx={{
         width: 260,
         height: "100vh",
+<<<<<<< HEAD
         bgcolor: "linear-gradient(180deg, #0F172A 0%, #111827 100%)",
+=======
+        bgcolor: "#0F172A",
+>>>>>>> origin/main
         color: "#fff",
         display: "flex",
         flexDirection: "column",
@@ -82,6 +93,7 @@ export default function Sidebar() {
         position: "fixed",
         left: 0,
         top: 0,
+<<<<<<< HEAD
         borderRight: "1px solid rgba(255,255,255,0.08)",
         boxShadow: "24px 0 60px rgba(15, 23, 42, 0.18)",
       }}
@@ -123,6 +135,53 @@ export default function Sidebar() {
               <ListItemIcon sx={{ color: "inherit", minWidth: 40 }}>
                 {item.icon}
               </ListItemIcon>
+=======
+      }}
+    >
+      <Box>
+        <Typography
+          variant="h5"
+          fontWeight={700}
+          sx={{
+            p: 3,
+            color: "#fff",
+          }}
+        >
+          TalentFlow
+        </Typography>
+
+        <List>
+          {menuItems.map((item) => (
+            <ListItemButton
+  component={item.path ? Link : "button"}
+  {...(item.path ? { to: item.path } : {})}
+  key={item.title}
+  selected={location.pathname === item.path}
+  disabled={!item.path}
+              sx={{
+                mx: 2,
+                mb: 1,
+                borderRadius: 2,
+
+                "&.Mui-selected": {
+                  bgcolor: "#2563EB",
+                },
+
+                "&:hover": {
+                  bgcolor: "#1E293B",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "#fff",
+                  minWidth: 40,
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+
+>>>>>>> origin/main
               <ListItemText primary={item.title} />
             </ListItemButton>
           ))}
@@ -134,6 +193,7 @@ export default function Sidebar() {
           onClick={handleLogout}
           sx={{
             borderRadius: 2,
+<<<<<<< HEAD
             px: 1.5,
             py: 1,
             color: "#E2E8F0",
@@ -145,6 +205,22 @@ export default function Sidebar() {
           <ListItemIcon sx={{ color: "inherit" }}>
             <LogoutIcon />
           </ListItemIcon>
+=======
+
+            "&:hover": {
+              bgcolor: "#1E293B",
+            },
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              color: "#fff",
+            }}
+          >
+            <LogoutIcon />
+          </ListItemIcon>
+
+>>>>>>> origin/main
           <ListItemText primary="Logout" />
         </ListItemButton>
       </Box>
