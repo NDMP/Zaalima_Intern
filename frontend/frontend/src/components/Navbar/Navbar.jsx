@@ -1,0 +1,217 @@
+import { useState, useEffect } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Box,
+  Button,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+
+import {
+  SmartToy,
+  Menu as MenuIcon,
+} from "@mui/icons-material";
+
+import { Link, useNavigate } from "react-router-dom";
+import { clearAuthSession, getUser } from "../../utils/auth";
+
+export default function Navbar() {
+  const navigate = useNavigate();
+  const user = getUser();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleLogout = () => {
+    clearAuthSession();
+    navigate("/choose-role", { replace: true });
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    { title: "Home", path: "/" },
+    { title: "Features", path: "#features" },
+    { title: "How It Works", path: "#how-it-works" },
+    { title: "Pricing", path: "#pricing" },
+    { title: "Contact", path: "#contact" },
+  ];
+
+  return (
+    <>
+      <AppBar
+        position="fixed"
+        color="transparent"
+        elevation={scrolled ? 4 : 0}
+        sx={{
+            zIndex: 1300,
+          backgroundColor: "rgba(255,255,255,0.95)",
+          backdropFilter: scrolled ? "blur(10px)" : "none",
+          transition: "0.3s",
+        }}
+      >
+        <Toolbar
+          sx={{
+            justifyContent: "space-between",
+            py: 1,
+          }}
+        >
+          <Box
+            component={Link}
+            to="/"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none",
+              color: "#0F172A",
+            }}
+          >
+            <SmartToy
+              sx={{
+                color: "#0F172A",
+                mr: 1,
+                fontSize: 34,
+              }}
+            />
+
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 800,
+                color: "#0F172A",
+                letterSpacing: "0.02em",
+              }}
+            >
+              TalentFlow
+            </Typography>
+          </Box>
+
+          <Box
+            sx={{
+              display: {
+                xs: "none",
+                md: "flex",
+              },
+              gap: 4,
+            }}
+          >
+            {navLinks.map((link) => (
+              <Typography
+                key={link.title}
+                component="a"
+                href={link.path}
+                sx={{
+                  textDecoration: "none",
+                  color: "#0F172A",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  letterSpacing: "0.01em",
+                  transition: "color 0.2s ease",
+
+                  "&:hover": {
+                    color: "#1D4ED8",
+                  },
+                }}
+              >
+                {link.title}
+              </Typography>
+            ))}
+          </Box>
+
+          <Box
+            sx={{
+              display: {
+                xs: "none",
+                md: "flex",
+              },
+              gap: 2,
+            }}
+          >
+           
+
+            <Button
+  component={Link}
+  to={user ? `/${user.role}/dashboard` : "/choose-role"}
+  variant="contained"
+  sx={{
+    borderRadius: 50,
+    backgroundColor: "#1D4ED8",
+    color: "#ffffff",
+    fontWeight: 700,
+    px: 4,
+    py: 1.1,
+    boxShadow: "0 12px 30px rgba(29, 78, 216, 0.18)",
+    '&:hover': {
+      backgroundColor: '#1E40AF',
+    },
+  }}
+>
+  {user ? "Dashboard" : "Login"}
+</Button>
+
+            {user ? (
+              <Button
+                onClick={handleLogout}
+                variant="text"
+                sx={{ borderRadius: 50 }}
+              >
+                Logout
+              </Button>
+            ) : null}
+          </Box>
+
+          <IconButton
+            sx={{
+              display: {
+                md: "none",
+              },
+            }}
+            onClick={() => setMobileOpen(true)}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+      >
+        <Box sx={{ width: 250, p: 2 }}>
+          <List>
+            {navLinks.map((link) => (
+              <ListItem
+                key={link.title}
+                component="a"
+                href={link.path}
+              >
+                <ListItemText primary={link.title} />
+              </ListItem>
+            ))}
+          </List>
+
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ mt: 2 }}
+          >
+            Get Started
+          </Button>
+        </Box>
+      </Drawer>
+    </>
+  );
+}

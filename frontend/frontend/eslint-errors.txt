@@ -1,0 +1,187 @@
+﻿
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\components\Hero\Hero.jsx
+  1:8  error  'React' is defined but never used  no-unused-vars
+
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\components\Navbar\Navbar.jsx
+  1:8  error  'React' is defined but never used  no-unused-vars
+
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\components\footer\footer.jsx
+  6:3  error  'Link' is defined but never used  no-unused-vars
+
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\context\ApplicationContext.jsx
+  3:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file  react-refresh/only-export-components
+
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\context\JobContext.jsx
+  3:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file  react-refresh/only-export-components
+
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\layouts\MainLayout.jsx
+  1:8  error  'React' is defined but never used  no-unused-vars
+
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\pages\Applicant\BrowseJobs.jsx
+  38:3  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  36 | };
+  37 | useEffect(() => {
+> 38 |   fetchJobs();
+     |   ^^^^^^^^^ Avoid calling setState() directly within an effect
+  39 | }, []);
+  40 |
+  41 |   const [search, setSearch] = useState("");  react-hooks/set-state-in-effect
+
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\pages\Recruiter\CreateJob.jsx
+  59:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  57 | useEffect(() => {
+  58 |   if (editingJob) {
+> 59 |     setJobData(editingJob);
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  60 |   }
+  61 | }, [editingJob]);
+  62 | const handleSubmit = async () => {  react-hooks/set-state-in-effect
+  78:9  error  'token' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        no-unused-vars
+
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\pages\Recruiter\Dashboard.jsx
+  127:14  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  125 |         <Grid container spacing={3} mb={4}>
+  126 |           <Grid item xs={12} md={3}>
+> 127 |             <Card
+      |              ^^^^ This component is created during render
+  128 |               title="Open Jobs"
+  129 |               value={8}
+  130 |               color="#2563EB"
+
+  50 |   }, []);
+  51 |
+> 52 |   const Card = ({ title, value, icon, color }) => (
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 53 |     <Paper
+     | ^^^^^^^^^^
+> 54 |       sx={{
+     ΓÇª
+     | ^^^^^^^^^^
+> 71 |     </Paper>
+     | ^^^^^^^^^^
+> 72 |   );
+     | ^^^^ The component is created during render here
+  73 |
+  74 |   return (
+  75 |     <>  react-hooks/static-components
+  136:14  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  134 |
+  135 |           <Grid item xs={12} md={3}>
+> 136 |             <Card
+      |              ^^^^ This component is created during render
+  137 |               title="Applicants"
+  138 |               value={applications.length}
+  139 |               color="#7C3AED"
+
+  50 |   }, []);
+  51 |
+> 52 |   const Card = ({ title, value, icon, color }) => (
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 53 |     <Paper
+     | ^^^^^^^^^^
+> 54 |       sx={{
+     ΓÇª
+     | ^^^^^^^^^^
+> 71 |     </Paper>
+     | ^^^^^^^^^^
+> 72 |   );
+     | ^^^^ The component is created during render here
+  73 |
+  74 |   return (
+  75 |     <>                           react-hooks/static-components
+  145:14  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  143 |
+  144 |           <Grid item xs={12} md={3}>
+> 145 |             <Card
+      |              ^^^^ This component is created during render
+  146 |               title="AI Match"
+  147 |               value="92%"
+  148 |               color="#10B981"
+
+  50 |   }, []);
+  51 |
+> 52 |   const Card = ({ title, value, icon, color }) => (
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 53 |     <Paper
+     | ^^^^^^^^^^
+> 54 |       sx={{
+     ΓÇª
+     | ^^^^^^^^^^
+> 71 |     </Paper>
+     | ^^^^^^^^^^
+> 72 |   );
+     | ^^^^ The component is created during render here
+  73 |
+  74 |   return (
+  75 |     <>                                             react-hooks/static-components
+  154:14  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  152 |
+  153 |           <Grid item xs={12} md={3}>
+> 154 |             <Card
+      |              ^^^^ This component is created during render
+  155 |               title="Hired"
+  156 |               value={3}
+  157 |               color="#F59E0B"
+
+  50 |   }, []);
+  51 |
+> 52 |   const Card = ({ title, value, icon, color }) => (
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 53 |     <Paper
+     | ^^^^^^^^^^
+> 54 |       sx={{
+     ΓÇª
+     | ^^^^^^^^^^
+> 71 |     </Paper>
+     | ^^^^^^^^^^
+> 72 |   );
+     | ^^^^ The component is created during render here
+  73 |
+  74 |   return (
+  75 |     <>                                                  react-hooks/static-components
+
+D:\zaalima\Zaalima_Intern-main\Zaalima_Intern-main\frontend\frontend\src\pages\Recruiter\Jobs.jsx
+  33:3  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  31 |
+  32 | useEffect(() => {
+> 33 |   fetchJobs();
+     |   ^^^^^^^^^ Avoid calling setState() directly within an effect
+  34 | }, []);
+  35 |   return (
+  36 |     <>  react-hooks/set-state-in-effect
+
+Γ£û 14 problems (14 errors, 0 warnings)
+

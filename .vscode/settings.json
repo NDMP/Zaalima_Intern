@@ -1,0 +1,8 @@
+{
+    "mdb.presetConnections": [
+        {
+            "name": "ATS Atlas",
+            "connectionString": "mongodb://nagendranv2004_db_user:J5aVihm4GwpvUpwR@ac-b7omqea-shard-00-00.grhghpk.mongodb.net:27017,ac-b7omqea-shard-00-01.grhghpk.mongodb.net:27017,ac-b7omqea-shard-00-02.grhghpk.mongodb.net:27017/?authSource=admin&replicaSet=atlas-pwv9r1-shard-0&retryWrites=true&w=majority&tls=true"
+        }
+    ]
+}

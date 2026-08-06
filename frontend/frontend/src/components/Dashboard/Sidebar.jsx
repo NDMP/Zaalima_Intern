@@ -1,0 +1,151 @@
+import {
+  Box,
+  Typography,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+
+import DashboardIcon from "@mui/icons-material/Dashboard";
+
+import WorkIcon from "@mui/icons-material/Work";
+import GroupIcon from "@mui/icons-material/Group";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import AnalyticsIcon from "@mui/icons-material/Analytics";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { clearAuthSession } from "../../utils/auth";
+
+const menuItems = [
+  {
+    title: "Dashboard",
+    icon: <DashboardIcon />,
+    path: "/recruiter/dashboard",
+  },
+  {
+    title: "Jobs",
+    icon: <WorkIcon />,
+    path: "/recruiter/jobs",
+  },
+  {
+    title: "Applicants",
+    icon: <GroupIcon />,
+    path: "/recruiter/applicants",
+  },
+  {
+  title: "AI Screening",
+  icon: <SmartToyIcon />,
+  path: "/recruiter/ai-screening",
+},
+{
+  title: "Analytics",
+  icon: <AnalyticsIcon />,
+  path: "/recruiter/analytics",
+},
+{
+  title: "Settings",
+  icon: <SettingsIcon />,
+  path: "/recruiter/settings",
+},
+];
+
+export default function Sidebar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    clearAuthSession();
+    navigate("/choose-role", { replace: true });
+  };
+
+  return (
+    <Box
+      sx={{
+        width: 260,
+        height: "100vh",
+        bgcolor: "#0F172A",
+        color: "#fff",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        position: "fixed",
+        left: 0,
+        top: 0,
+      }}
+    >
+      <Box>
+        <Typography
+          variant="h5"
+          fontWeight={700}
+          sx={{
+            p: 3,
+            color: "#fff",
+          }}
+        >
+          TalentFlow
+        </Typography>
+
+        <List>
+          {menuItems.map((item) => (
+            <ListItemButton
+  component={item.path ? Link : "button"}
+  {...(item.path ? { to: item.path } : {})}
+  key={item.title}
+  selected={location.pathname === item.path}
+  disabled={!item.path}
+              sx={{
+                mx: 2,
+                mb: 1,
+                borderRadius: 2,
+
+                "&.Mui-selected": {
+                  bgcolor: "#2563EB",
+                },
+
+                "&:hover": {
+                  bgcolor: "#1E293B",
+                },
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "#fff",
+                  minWidth: 40,
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+
+              <ListItemText primary={item.title} />
+            </ListItemButton>
+          ))}
+        </List>
+      </Box>
+
+      <Box sx={{ p: 2 }}>
+        <ListItemButton
+          onClick={handleLogout}
+          sx={{
+            borderRadius: 2,
+
+            "&:hover": {
+              bgcolor: "#1E293B",
+            },
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              color: "#fff",
+            }}
+          >
+            <LogoutIcon />
+          </ListItemIcon>
+
+          <ListItemText primary="Logout" />
+        </ListItemButton>
+      </Box>
+    </Box>
+  );
+}
