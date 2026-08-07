@@ -43,6 +43,10 @@ notifications: {
     type: Boolean,
     default: false,
   },
+  profileImage: {
+  type: String,
+  default: "",
+},
 },
     designation: {
       type: String,
@@ -98,6 +102,10 @@ const applicantProfileSchema = new mongoose.Schema(
       trim: true,
     },
     bio: {
+  type: String,
+  default: "",
+},
+profileImage: {
   type: String,
   default: "",
 },

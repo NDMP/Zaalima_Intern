@@ -147,3 +147,83 @@ export const changePassword = async (req, res) => {
     });
   }
 };
+export const uploadResume = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Please upload a resume",
+      });
+    }
+
+    user.applicantProfile.resume = req.file.filename;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Resume uploaded successfully",
+      resume: req.file.filename,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+export const uploadProfileImage = async (req, res) => {
+  try {
+    console.log(req.file);
+console.log(req.body);
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Please upload an image",
+      });
+    }
+
+    if (user.role === "applicant") {
+      user.applicantProfile.profileImage = req.file.filename;
+    }
+
+    if (user.role === "recruiter") {
+      user.recruiterProfile.profileImage = req.file.filename;
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Profile image uploaded successfully.",
+      image: req.file.filename,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
