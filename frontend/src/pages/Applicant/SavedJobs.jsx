@@ -42,12 +42,22 @@ export default function SavedJobs() {
       <Grid container spacing={3}>
         {jobs.length === 0 ? (
           <Grid size={12}>
-            <Typography
-              textAlign="center"
-              color="text.secondary"
-            >
-              No saved jobs yet.
-            </Typography>
+            <Box
+              sx={{
+                 textAlign: "center",
+                  py: 8,
+                }}
+              > 
+              <Typography variant="h5" fontWeight={600}>
+                    No Saved Jobs
+              </Typography>
+
+              <Typography color="text.secondary" mt={1}>
+                 Save jobs to access them quickly later.
+                  </Typography>
+                       </Box>
+                
+            
           </Grid>
         ) : (
           jobs.map((job) => (
