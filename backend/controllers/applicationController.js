@@ -150,7 +150,7 @@ export const getScheduledInterviews = async (req, res) => {
     })
       .populate("job", "title")
       .sort({ "interview.date": 1 });
-      console.log("Interview found:", interview);
+      console.log("Interview found:", interviews);
 
     res.json({
       success: true,
