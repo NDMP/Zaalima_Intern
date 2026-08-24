@@ -85,7 +85,12 @@ const toggleSaveJob = async () => {
         {job.company}
       </Typography>
 
-      <Stack direction="row" spacing={2} mt={2} flexWrap="wrap">
+      <Stack
+  direction="row"
+  spacing={2}
+  mt={2}
+  sx={{ flexWrap: "wrap" }}
+>
         <Chip
           icon={<LocationOnIcon />}
           label={job.location}

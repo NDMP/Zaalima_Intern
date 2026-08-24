@@ -90,7 +90,11 @@ function SkillChips({ skills = [], color = "default" }) {
   }
 
   return (
-    <Box display="flex" gap={0.75} flexWrap="wrap">
+    <Box
+  display="flex"
+  gap={0.75}
+  sx={{ flexWrap: "wrap" }}
+>
       {skills.map((skill) => (
         <Chip key={skill} label={skill} size="small" color={color} />
       ))}
@@ -546,7 +550,12 @@ const downloadPDF = () => {
               ))}
             </Grid>
 
-            <Box display="flex" gap={2} mb={3} flexWrap="wrap">
+            <Box
+  display="flex"
+  gap={2}
+  mb={3}
+  sx={{ flexWrap: "wrap" }}
+>
               <TextField
                 label="Search Candidate"
                 placeholder="Name, email, or skills"

@@ -112,11 +112,11 @@ const fetchJobs = async () => {
             </Typography>
 
             <Stack
-              direction="row"
-              spacing={1}
-              mb={2}
-              flexWrap="wrap"
-            >
+  direction="row"
+  spacing={1}
+  mb={2}
+  sx={{ flexWrap: "wrap" }}
+>
               <Chip label={job.location} />
 
               <Chip

@@ -51,7 +51,7 @@ export default function Interviews() {
 
           {interviews.map((item) => (
 
-            <Grid item xs={12} md={6} lg={4} key={item._id}>
+            <Grid xs={12} md={6} lg={4} key={item._id}>
 
               <Typography
    variant="body1"

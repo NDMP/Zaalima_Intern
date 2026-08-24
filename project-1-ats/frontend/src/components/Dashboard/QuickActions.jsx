@@ -19,7 +19,11 @@ export default function QuickActions() {
         Quick Actions
       </Typography>
 
-      <Stack direction="row" spacing={2} flexWrap="wrap">
+      <Stack
+  direction="row"
+  spacing={2}
+  sx={{ flexWrap: "wrap" }}
+>
         <Button
           variant="contained"
           sx={{
