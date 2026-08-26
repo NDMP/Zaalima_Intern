@@ -5,109 +5,98 @@ import {
   Grid,
 } from "@mui/material";
 
-import Sidebar from "../../components/Dashboard/Sidebar";
-import Topbar from "../../components/Dashboard/Topbar";
 import ApplicantCard from "../../components/Recruiter/ApplicantCard";
-import axios from "axios";
-import { getToken } from "../../utils/auth";
+import api from "../../utils/api";
 
 export default function Applicants() {
   const [applications, setApplications] = useState([]);
 
   useEffect(() => {
-  const fetchApplications = async () => {
+    const fetchApplications = async () => {
+      try {
+        const res = await api.get("/applications");
+        setApplications(res.data.applications);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchApplications();
+  }, []);
+
+  const updateStatus = async (id, status) => {
     try {
-      const token = getToken();
+      await api.patch(`/applications/${id}/status`, { status });
 
-      const res = await axios.get(
-        "http://localhost:5000/api/applications",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      setApplications((prev) =>
+        prev.map((app) =>
+          app._id === id ? { ...app, status } : app
+        )
       );
-
-      setApplications(res.data.applications);
     } catch (error) {
       console.error(error);
     }
   };
 
-  fetchApplications();
-}, []);
-
-  const updateStatus = async (id, status) => {
-  try {
-    const token = getToken();
-
-    await axios.patch(
-      `http://localhost:5000/api/applications/${id}/status`,
-      { status },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    setApplications((prev) =>
-      prev.map((app) =>
-        app._id === id ? { ...app, status } : app
-      )
-    );
-  } catch (error) {
-    console.error(error);
-  }
-};
-
   return (
-    <>
-      <Sidebar />
-      <Topbar />
-
-      <Box
-        sx={{
-          ml: "260px",
-          mt: "72px",
-          p: 4,
-          background: "#F8FAFC",
-          minHeight: "100vh",
-        }}
-      >
+    <Box sx={{ width: "100%" }}>
+      {/* Header Section */}
+      <Box sx={{ mb: 2.5 }}>
         <Typography
           variant="h4"
-          fontWeight={700}
-          mb={4}
+          fontWeight={800}
+          sx={{ fontSize: { xs: "1.75rem", md: "2rem" }, color: "#0F172A", mb: 0.5 }}
         >
           Applicants
         </Typography>
+        <Typography
+          color="text.secondary"
+          sx={{ color: "#64748B" }}
+        >
+          Review, shortlist, and manage every candidate in one place.
+        </Typography>
+      </Box>
 
-        {applications.length === 0 ? (
-          <Typography color="text.secondary">
+      {/* Applicants Grid */}
+      {applications.length === 0 ? (
+        <Box
+          sx={{
+            textAlign: "center",
+            py: 6,
+            color: "text.secondary",
+          }}
+        >
+          <Typography
+            sx={{
+              color: "#334155",
+              fontWeight: 600,
+            }}
+          >
             No applications received yet.
           </Typography>
-        ) : (
-          <Grid container spacing={3}>
-            {applications.map((application) => (
-              <Grid
-                key={application._id}
-                size={{ xs: 12, md: 6 }}
-              >
-                <ApplicantCard
-                  application={application}
-                  onShortlist={(id) =>
-  updateStatus(id, "Accepted")
-}
-                  onReject={(id) =>
-                    updateStatus(id, "Rejected")
-                  }
-                />
-              </Grid>
-            ))}
-          </Grid>
-        )}
-      </Box>
-    </>
+        </Box>
+      ) : (
+        <Grid container spacing={2.5}>
+          {applications.map((application) => (
+            <Grid
+              key={application._id}
+              item
+              xs={12}
+              md={6}
+            >
+              <ApplicantCard
+                application={application}
+                onShortlist={(id) =>
+                  updateStatus(id, "Accepted")
+                }
+                onReject={(id) =>
+                  updateStatus(id, "Rejected")
+                }
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </Box>
   );
 }

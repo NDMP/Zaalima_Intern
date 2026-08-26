@@ -4,6 +4,8 @@ const theme = createTheme({
   palette: {
     primary: {
       main: "#2563eb",
+      dark: "#1D4ED8",
+      contrastText: "#FFFFFF",
     },
     secondary: {
       main: "#0f172a",
@@ -32,7 +34,49 @@ const theme = createTheme({
   },
 
   shape: {
-    borderRadius: 12,
+    borderRadius: 10,
+  },
+
+  components: {
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          minHeight: 40,
+        },
+        containedPrimary: {
+          backgroundColor: "#2563EB",
+          "&:hover": {
+            backgroundColor: "#1D4ED8",
+          },
+        },
+        outlinedPrimary: {
+          borderColor: "#2563EB",
+          color: "#2563EB",
+          "&:hover": {
+            borderColor: "#1D4ED8",
+            backgroundColor: "#EFF6FF",
+          },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+        },
+      },
+    },
   },
 });
 

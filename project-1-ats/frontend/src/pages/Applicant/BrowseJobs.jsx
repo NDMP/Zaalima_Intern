@@ -66,9 +66,13 @@ useEffect(() => {
   return (
     <Box
       sx={{
-        p: 4,
+        p: { xs: 1, sm: 2, md: 3 },
         background: "#F8FAFC",
-        minHeight: "100vh",
+        minHeight: "100%",
+        width: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
+        textAlign: "left",
       }}
     >
       <Typography
@@ -81,8 +85,8 @@ useEffect(() => {
 
       {/* Search & Filters */}
 
-      <Grid container spacing={2} mb={4}>
-        <Grid size={{ xs: 12, md: 6 }}>
+      <Grid container spacing={2} mb={4} sx={{ width: "100%", minWidth: 0 }}>
+        <Grid size={{ xs: 12, md: 6 }} sx={{ minWidth: 0 }}>
           <TextField
             fullWidth
             placeholder="Search jobs..."
@@ -95,16 +99,18 @@ useEffect(() => {
                 </InputAdornment>
               ),
             }}
+            sx={{ "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#BFDBFE" }, "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#2563EB" } }}
           />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 3 }}>
+        <Grid size={{ xs: 12, md: 3 }} sx={{ minWidth: 0 }}>
           <TextField
             select
             fullWidth
             label="Work Mode"
             value={workMode}
             onChange={(e) => setWorkMode(e.target.value)}
+            sx={{ "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#BFDBFE" }, "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#2563EB" } }}
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="Remote">Remote</MenuItem>
@@ -113,7 +119,7 @@ useEffect(() => {
           </TextField>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 3 }}>
+        <Grid size={{ xs: 12, md: 3 }} sx={{ minWidth: 0 }}>
           <TextField
             select
             fullWidth
@@ -122,6 +128,7 @@ useEffect(() => {
             onChange={(e) =>
               setEmploymentType(e.target.value)
             }
+            sx={{ "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#BFDBFE" }, "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#2563EB" } }}
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="Full Time">Full Time</MenuItem>
@@ -134,7 +141,7 @@ useEffect(() => {
 
       {/* Jobs */}
 
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ width: "100%", minWidth: 0 }}>
         {filteredJobs.length === 0 ? (
           <Grid size={12}>
             <Typography
@@ -149,7 +156,8 @@ useEffect(() => {
           filteredJobs.map((job) => (
             <Grid
               key={job._id}
-              size={{ xs: 12, md: 6 }}
+              size={{ xs: 12, sm: 6, lg: 4 }}
+              sx={{ minWidth: 0, display: "flex" }}
             >
               <ApplicantJobCard job={job} />
             </Grid>

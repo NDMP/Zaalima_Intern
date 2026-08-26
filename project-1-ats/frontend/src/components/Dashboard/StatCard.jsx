@@ -3,6 +3,7 @@ import { Paper, Typography, Box } from "@mui/material";
 export default function StatCard({
   title,
   value,
+  detail,
   icon,
   color,
 }) {
@@ -10,56 +11,78 @@ export default function StatCard({
     <Paper
       elevation={0}
       sx={{
-        p: 3,
-        borderRadius: 4,
-        border: "1px solid #E5E7EB",
-        transition: ".3s",
-
+        p: { xs: 2, sm: 2.25 },
+        borderRadius: 3,
+        border: "1px solid #E2E8F0",
+        bgcolor: "#FFFFFF",
+        minHeight: 120,
+        transition: "all 180ms ease",
         "&:hover": {
-          transform: "translateY(-6px)",
-          boxShadow: "0 20px 45px rgba(15,23,42,.08)",
+          transform: "translateY(-4px)",
+          boxShadow: "0 16px 36px rgba(15, 23, 42, 0.08)",
+          borderColor: "#BFDBFE",
         },
       }}
     >
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
+          justifyContent: "space-between",
+          gap: 1.5,
+          minHeight: 54,
         }}
       >
-        <Box>
-          <Typography
-            color="text.secondary"
-            fontSize={15}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, minWidth: 0 }}>
+          <Box
+            sx={{
+              width: 44,
+              height: 44,
+              borderRadius: 2,
+              background: color,
+              color: "#0F172A",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              fontSize: "1.35rem",
+            }}
           >
-            {title}
-          </Typography>
+            {icon}
+          </Box>
 
           <Typography
             variant="h4"
-            fontWeight={700}
-            mt={1}
+            fontWeight={800}
+            sx={{
+              color: "#0F172A",
+              fontSize: { xs: "1.5rem", md: "2rem" },
+              lineHeight: 1,
+            }}
           >
             {value}
           </Typography>
         </Box>
-
-        <Box
-          sx={{
-            width: 60,
-            height: 60,
-            borderRadius: "18px",
-            bgcolor: color,
-            color: "#fff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {icon}
-        </Box>
       </Box>
+
+      <Typography
+        sx={{
+          mt: 1.75,
+          fontSize: "0.78rem",
+          fontWeight: 600,
+          color: "#64748B",
+          px: 1.25,
+          py: 0.55,
+          borderRadius: 1.5,
+          bgcolor: "#F8FAFC",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid #E2E8F0",
+        }}
+      >
+        {detail}
+      </Typography>
     </Paper>
   );
 }

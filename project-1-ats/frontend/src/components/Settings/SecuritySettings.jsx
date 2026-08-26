@@ -1,17 +1,19 @@
 import { useState } from "react";
 import {
   Button,
-  Card,
-  CardContent,
-  Grid,
+  Paper,
+  Box,
   IconButton,
   InputAdornment,
   TextField,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import LockIcon from "@mui/icons-material/Lock";
 
 import api from "../../utils/api";
 
@@ -25,17 +27,30 @@ export default function SecuritySettings() {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const changePassword = async () => {
     if (form.newPassword !== form.confirmPassword) {
-      alert("Passwords do not match");
+      setSnackbar({
+        open: true,
+        message: "Passwords do not match",
+        severity: "error",
+      });
       return;
     }
 
     try {
       const { data } = await api.put("/settings/change-password", form);
 
-      alert(data.message);
+      setSnackbar({
+        open: true,
+        message: data.message || "Password changed successfully!",
+        severity: "success",
+      });
 
       setForm({
         currentPassword: "",
@@ -43,31 +58,77 @@ export default function SecuritySettings() {
         confirmPassword: "",
       });
     } catch (error) {
-      alert(
-        error.response?.data?.message || "Failed to change password"
-      );
+      setSnackbar({
+        open: true,
+        message: error.response?.data?.message || "Failed to change password",
+        severity: "error",
+      });
     }
   };
 
   return (
-    <Card sx={{ borderRadius: 4 }}>
-      <CardContent>
-
-        <Typography
-          variant="h5"
-          fontWeight={700}
-          mb={3}
+    <>
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: 3,
+          border: "1px solid #E2E8F0",
+          bgcolor: "#FFFFFF",
+          overflow: "hidden",
+        }}
+      >
+        {/* Header */}
+        <Box
+          sx={{
+            p: { xs: 2, sm: 3 },
+            bgcolor: "#F8FAFC",
+            borderBottom: "1px solid #E2E8F0",
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+          }}
         >
-          Security
-        </Typography>
+          <Box
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: 2,
+              bgcolor: "#FEE2E2",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#DC2626",
+            }}
+          >
+            <LockIcon />
+          </Box>
+          <Typography
+            variant="h6"
+            fontWeight={800}
+            sx={{ color: "#0F172A" }}
+          >
+            Security & Password
+          </Typography>
+        </Box>
 
-        <Grid container spacing={3}>
-
-          <Grid size={{ xs: 12 }}>
+        {/* Form Content */}
+        <Box sx={{ p: { xs: 2, sm: 3 } }}>
+          <Box sx={{ mb: 2.5 }}>
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                color: "#0F172A",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                mb: 1,
+              }}
+            >
+              Current Password
+            </Typography>
             <TextField
               fullWidth
               type={showCurrent ? "text" : "password"}
-              label="Current Password"
               value={form.currentPassword}
               onChange={(e) =>
                 setForm({
@@ -75,6 +136,9 @@ export default function SecuritySettings() {
                   currentPassword: e.target.value,
                 })
               }
+              placeholder="Enter your current password"
+              variant="outlined"
+              size="small"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -82,24 +146,43 @@ export default function SecuritySettings() {
                       onClick={() =>
                         setShowCurrent(!showCurrent)
                       }
+                      edge="end"
+                      size="small"
                     >
                       {showCurrent ? (
-                        <VisibilityOff />
+                        <VisibilityOff sx={{ fontSize: "1.2rem" }} />
                       ) : (
-                        <Visibility />
+                        <Visibility sx={{ fontSize: "1.2rem" }} />
                       )}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                  fontSize: "0.9rem",
+                },
+              }}
             />
-          </Grid>
+          </Box>
 
-          <Grid size={{ xs: 12 }}>
+          <Box sx={{ mb: 2.5 }}>
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                color: "#0F172A",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                mb: 1,
+              }}
+            >
+              New Password
+            </Typography>
             <TextField
               fullWidth
               type={showNew ? "text" : "password"}
-              label="New Password"
               value={form.newPassword}
               onChange={(e) =>
                 setForm({
@@ -107,6 +190,9 @@ export default function SecuritySettings() {
                   newPassword: e.target.value,
                 })
               }
+              placeholder="Enter your new password"
+              variant="outlined"
+              size="small"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -114,24 +200,54 @@ export default function SecuritySettings() {
                       onClick={() =>
                         setShowNew(!showNew)
                       }
+                      edge="end"
+                      size="small"
                     >
                       {showNew ? (
-                        <VisibilityOff />
+                        <VisibilityOff sx={{ fontSize: "1.2rem" }} />
                       ) : (
-                        <Visibility />
+                        <Visibility sx={{ fontSize: "1.2rem" }} />
                       )}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                  fontSize: "0.9rem",
+                },
+              }}
             />
-          </Grid>
+            <Typography
+              variant="caption"
+              sx={{
+                mt: 0.75,
+                display: "block",
+                color: "#64748B",
+                fontSize: "0.8rem",
+              }}
+            >
+              Use at least 8 characters with a mix of letters, numbers, and symbols.
+            </Typography>
+          </Box>
 
-          <Grid size={{ xs: 12 }}>
+          <Box sx={{ mb: 2.5 }}>
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                color: "#0F172A",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                mb: 1,
+              }}
+            >
+              Confirm New Password
+            </Typography>
             <TextField
               fullWidth
               type={showConfirm ? "text" : "password"}
-              label="Confirm Password"
               value={form.confirmPassword}
               onChange={(e) =>
                 setForm({
@@ -139,6 +255,9 @@ export default function SecuritySettings() {
                   confirmPassword: e.target.value,
                 })
               }
+              placeholder="Confirm your new password"
+              variant="outlined"
+              size="small"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -146,35 +265,62 @@ export default function SecuritySettings() {
                       onClick={() =>
                         setShowConfirm(!showConfirm)
                       }
+                      edge="end"
+                      size="small"
                     >
                       {showConfirm ? (
-                        <VisibilityOff />
+                        <VisibilityOff sx={{ fontSize: "1.2rem" }} />
                       ) : (
-                        <Visibility />
+                        <Visibility sx={{ fontSize: "1.2rem" }} />
                       )}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                  fontSize: "0.9rem",
+                },
+              }}
             />
-          </Grid>
+          </Box>
 
-        </Grid>
+          {/* Update Button */}
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={changePassword}
+            sx={{
+              minHeight: 44,
+              borderRadius: 2,
+              textTransform: "none",
+              fontWeight: 700,
+              fontSize: "0.9rem",
+              backgroundColor: "#2563EB",
+              color: "#fff",
+              boxShadow: "0 2px 8px rgba(23, 59, 120, 0.15)",
+              transition: "all 160ms ease",
+              "&:hover": {
+                backgroundColor: "#1D4ED8",
+                transform: "translateY(-1px)",
+                boxShadow: "0 4px 12px rgba(23, 59, 120, 0.25)",
+              },
+            }}
+          >
+            Update Password
+          </Button>
+        </Box>
+      </Paper>
 
-        <Button
-          variant="contained"
-          fullWidth
-          sx={{
-            mt: 4,
-            py: 1.5,
-            borderRadius: 2,
-          }}
-          onClick={changePassword}
-        >
-          Change Password
-        </Button>
-
-      </CardContent>
-    </Card>
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+      </Snackbar>
+    </>
   );
 }

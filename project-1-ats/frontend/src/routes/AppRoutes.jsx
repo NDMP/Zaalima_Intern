@@ -21,6 +21,8 @@ import Interviews from "../pages/Recruiter/Interviews";
 import ProtectedRoute from "./ProtectedRoute";
 import SavedJobs from "../pages/Applicant/SavedJobs";
 import Profile from "../pages/Applicant/Profile";
+import ApplicantLayout from "../layouts/ApplicantLayout";
+import RecruiterLayout from "../layouts/RecruiterLayout";
 function AppRoutes() {
   return (
     <BrowserRouter>
@@ -52,26 +54,8 @@ function AppRoutes() {
   path="/choose-role"
   element={<RoleSelection />}
 /> 
-<Route
-  path="/recruiter/analytics"
-  element={<Analytics />}
-/>
-
-<Route
-  path="/recruiter/ai-screening"
-  element={<AIScreening />}
-/>
-
-<Route
-  path="/recruiter/interviews"
-  element={<Interviews />}
-/>
-
-<Route
-  path="/recruiter/settings"
-  element={<Settings />}
-/>
         <Route element={<ProtectedRoute role="applicant" />}>
+  <Route element={<ApplicantLayout />}>
   <Route path="/applicant/dashboard" element={<ApplicantDashboard />} />
 
   <Route path="/applicant/jobs" element={<BrowseJobs />} />
@@ -85,12 +69,19 @@ function AppRoutes() {
   <Route path="/applicant/saved-jobs" element={<SavedJobs />} />
 
   <Route path="/applicant/profile" element={<Profile />} />
+  </Route>
 </Route>
 <Route element={<ProtectedRoute role="recruiter" />}>
-  <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
-  <Route path="/recruiter/jobs" element={<Jobs />} />
-  <Route path="/recruiter/jobs/create" element={<CreateJob />} />
-  <Route path="/recruiter/applicants" element={<Applicants />} />
+  <Route element={<RecruiterLayout />}>
+    <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
+    <Route path="/recruiter/jobs" element={<Jobs />} />
+    <Route path="/recruiter/jobs/create" element={<CreateJob />} />
+    <Route path="/recruiter/applicants" element={<Applicants />} />
+    <Route path="/recruiter/analytics" element={<Analytics />} />
+    <Route path="/recruiter/ai-screening" element={<AIScreening />} />
+    <Route path="/recruiter/interviews" element={<Interviews />} />
+    <Route path="/recruiter/settings" element={<Settings />} />
+  </Route>
 </Route>
       </Routes>
     </BrowserRouter>

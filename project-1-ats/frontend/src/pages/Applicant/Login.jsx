@@ -1,315 +1,111 @@
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  TextField,
-  Typography,
-  InputAdornment,
-  IconButton,
-  Checkbox,
-  FormControlLabel,
-  Link,
-  Divider,
-  Alert,
-} from "@mui/material";
-
-
+import { useState } from "react";
+import { Alert, Box, Button, Checkbox, Container, Divider, FormControlLabel, IconButton, InputAdornment, LinearProgress, Link, Paper, TextField, Typography } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
-import SmartToyIcon from "@mui/icons-material/SmartToy";
 import LockIcon from "@mui/icons-material/Lock";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
-import { useState } from "react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../utils/api";
 import { saveAuthSession } from "../../utils/auth";
 
+const fieldSx = { "& .MuiOutlinedInput-root": { borderRadius: 2.5, "&:hover fieldset": { borderColor: "#93C5FD" }, "&.Mui-focused fieldset": { borderColor: "#2563EB", borderWidth: 2 } } };
+
 export default function ApplicantLogin() {
   const navigate = useNavigate();
+  const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-  const message = "Email and password are required";
-  setError(message);
-  toast.error(message);
-  return;
-}
+  const continueToPassword = () => {
+    if (!email.trim()) {
+      setError("Enter your email address to continue.");
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setError("Enter a valid email address.");
+      return;
+    }
+    setError("");
+    setStep(2);
+  };
 
+  const handleLogin = async () => {
+    if (!password) {
+      const message = "Enter your password to continue.";
+      setError(message);
+      toast.error(message);
+      return;
+    }
     try {
       setError("");
       setLoading(true);
-
-      const { data } = await api.post("/auth/login", {
-        email,
-        password,
-      });
-
+      const { data } = await api.post("/auth/login", { email, password });
       if (data?.user?.role !== "applicant") {
-  const message = "Only applicant accounts can login here.";
-  setError(message);
-  toast.error(message);
-  return;
-}
-
-      saveAuthSession({
-  token: data.token,
-  user: data.user,
-});
-
-toast.success("Login successful!");
-
-navigate("/applicant/dashboard", { replace: true });
-} catch (apiError) {
-  const message =
-    apiError?.response?.data?.message || "Login failed";
-
-  setError(message);
-  toast.error(message);
-} finally {
+        const message = "Only applicant accounts can login here.";
+        setError(message);
+        toast.error(message);
+        return;
+      }
+      saveAuthSession({ token: data.token, user: data.user });
+      toast.success("Login successful!");
+      navigate("/applicant/dashboard", { replace: true });
+    } catch (apiError) {
+      const message = apiError?.response?.data?.message || "Login failed";
+      setError(message);
+      toast.error(message);
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        bgcolor: "#F8FAFC",
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <Container maxWidth="xs">
-        <Paper
-  elevation={0}
-  sx={{
-    p: 5,
-    borderRadius: "24px",
-    boxShadow: "0 25px 60px rgba(37,99,235,.15)",
-border: "1px solid #E2E8F0",
-  }}
->   <Box
-  sx={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 1,
-    mb: 3,
-  }}
->
-  <SmartToyIcon
-    color="primary"
-    sx={{
-      fontSize: 44,
-    }}
-  />
+    <Box sx={{ minHeight: "100vh", bgcolor: "#F8FAFC", display: "grid", placeItems: "center", px: 2, py: 4 }}>
+      <Container maxWidth="xs" sx={{ p: 0 }}>
+        <Paper elevation={0} sx={{ p: { xs: 3, sm: 4 }, borderRadius: 3, border: "1px solid #E2E8F0", boxShadow: "0 20px 55px rgba(15,23,42,.10)" }}>
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 1, mb: 2.5 }}>
+            <SmartToyIcon sx={{ color: "#2563EB", fontSize: 34 }} />
+            <Typography sx={{ color: "#0F172A", fontSize: "1.25rem", fontWeight: 800 }}>TalentFlow</Typography>
+          </Box>
+          <Typography sx={{ color: "#0F172A", fontSize: "1.65rem", fontWeight: 800, textAlign: "center" }}>Applicant Login</Typography>
+          <Typography color="text.secondary" sx={{ textAlign: "center", mt: 0.75, mb: 2.5, fontSize: "0.9rem" }}>Sign in to continue your job search</Typography>
 
-  <Typography
-    variant="h5"
-    fontWeight={700}
-  >
-    TalentFlow
-  </Typography>
-</Box>
-          <Typography
-            variant="h4"
-            fontWeight={800}
-            align="center"
-            mb={1}
-          >
-            Welcome Back
-          </Typography>
-
-          <Typography
-color="text.secondary"
-fontWeight={500}
->
-Applicant Login
-</Typography>
-
-          {error ? (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              {error}
-            </Alert>
-          ) : null}
-
-         <TextField
-  fullWidth
-  label="Email"
-  placeholder="Enter your email"
-  margin="normal"
-  sx={{
-    mt: 2,
-
-    "& .MuiOutlinedInput-root": {
-      borderRadius: "14px",
-
-      "&:hover fieldset": {
-        borderColor: "#2563EB",
-      },
-
-      "&.Mui-focused fieldset": {
-        borderWidth: "2px",
-        borderColor: "#2563EB",
-      },
-    },
-  }}
-  InputProps={{
-  startAdornment: (
-    <InputAdornment position="start">
-      <EmailIcon color="primary" />
-    </InputAdornment>
-  ),
-}}
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-/>
-
-          <TextField
-  fullWidth
-  label="Password"
-  placeholder="Enter your password"
-  margin="dense"
-  type={showPassword ? "text" : "password"}
-  sx={{
-    mt: 3,
-    mb: 2,
-
-    "& .MuiOutlinedInput-root": {
-      borderRadius: "14px",
-
-      "&:hover fieldset": {
-        borderColor: "#2563EB",
-      },
-
-      "&.Mui-focused fieldset": {
-        borderWidth: "2px",
-        borderColor: "#2563EB",
-      },
-    },
-  }}
-  InputProps={{
-    startAdornment: (
-  <InputAdornment position="start">
-    <LockIcon color="primary" />
-  </InputAdornment>
-),
-
-    endAdornment: (
-      <InputAdornment position="end">
-        <IconButton
-          onClick={() => setShowPassword(!showPassword)}
-        >
-          {showPassword ? <VisibilityOff /> : <Visibility />}
-        </IconButton>
-      </InputAdornment>
-    ),
-  }}
-  value={password}
-  onChange={(e) => setPassword(e.target.value)}
-/>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mt: 2,
-            }}
-          >
-            <FormControlLabel
-  control={<Checkbox />}
-  label={
-    <Typography
-      sx={{
-        whiteSpace: "nowrap",
-        fontSize: "15px",
-      }}
-    >
-      Remember me
-    </Typography>
-  }
-/>
-
-           <Link
-  href="#"
-  underline="hover"
-  sx={{
-    fontWeight: 600,
-    fontSize: "15px",
-  }}
->
-  Forgot Password?
-</Link>
+          <Box sx={{ mb: 3 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.75 }}>
+              <Typography sx={{ color: "#2563EB", fontWeight: 700, fontSize: "0.8rem" }}>Step {step} of 2</Typography>
+              <Typography color="text.secondary" sx={{ fontSize: "0.8rem" }}>{step === 1 ? "Account" : "Security"}</Typography>
+            </Box>
+            <LinearProgress variant="determinate" value={step === 1 ? 50 : 100} sx={{ height: 6, borderRadius: 5, bgcolor: "#E2E8F0", "& .MuiLinearProgress-bar": { bgcolor: "#2563EB", borderRadius: 5 } }} />
           </Box>
 
-          <Button
-  fullWidth
-  variant="contained"
-  size="large"
-            onClick={handleLogin}
-            disabled={loading}
-  sx={{
-  mt: 3,
-  py: 1.7,
-  borderRadius: "14px",
-  fontWeight: 700,
-  fontSize: "1rem",
-  textTransform: "none",
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-  boxShadow: "0 10px 30px rgba(37,99,235,.35)",
+          {step === 1 ? (
+            <>
+              <TextField fullWidth label="Email address" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && continueToPassword()} InputProps={{ startAdornment: <InputAdornment position="start"><EmailIcon sx={{ color: "#2563EB" }} /></InputAdornment> }} sx={fieldSx} autoFocus />
+              <Button fullWidth variant="contained" endIcon={<ArrowForwardIcon />} onClick={continueToPassword} sx={{ mt: 3, minHeight: 48, borderRadius: 2.5, bgcolor: "#2563EB", fontWeight: 700, "&:hover": { bgcolor: "#1D4ED8" } }}>Continue</Button>
+            </>
+          ) : (
+            <>
+              <Typography color="text.secondary" sx={{ mb: 1.5, fontSize: "0.88rem" }}>Signing in as <strong>{email}</strong></Typography>
+              <TextField fullWidth label="Password" placeholder="Enter your password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleLogin()} InputProps={{ startAdornment: <InputAdornment position="start"><LockIcon sx={{ color: "#2563EB" }} /></InputAdornment>, endAdornment: <InputAdornment position="end"><IconButton onClick={() => setShowPassword((visible) => !visible)} edge="end">{showPassword ? <VisibilityOff /> : <Visibility />}</IconButton></InputAdornment> }} sx={fieldSx} autoFocus />
+              <FormControlLabel sx={{ mt: 1.5 }} control={<Checkbox size="small" />} label={<Typography sx={{ fontSize: "0.82rem" }}>Remember me</Typography>} />
+              <Box sx={{ display: "flex", gap: 1.25, mt: 2.5 }}>
+                <Button fullWidth variant="outlined" startIcon={<ArrowBackIcon />} onClick={() => setStep(1)} sx={{ minHeight: 48, borderRadius: 2.5, borderColor: "#2563EB", color: "#2563EB", fontWeight: 700 }}>Back</Button>
+                <Button fullWidth variant="contained" onClick={handleLogin} disabled={loading} sx={{ minHeight: 48, borderRadius: 2.5, bgcolor: "#2563EB", fontWeight: 700, "&:hover": { bgcolor: "#1D4ED8" } }}>{loading ? "Signing in..." : "Login"}</Button>
+              </Box>
+            </>
+          )}
 
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: "0 18px 35px rgba(37,99,235,.45)",
-  },
-}}
->
-  {loading ? "Logging in..." : "Login"}
-</Button>
-
-<Divider
-  sx={{
-    my: 3,
-    color: "#94A3B8",
-    fontWeight: 600,
-  }}
->
-  OR
-</Divider>
-
-<Typography align="center">
-  New to TalentFlow?
-Create Applicant Account {" "}
-  <Link
-    component={RouterLink}
-    to="/applicant/register"
-    underline="hover"
-    fontWeight={700}
-  >
-    Register
-  </Link>
-</Typography>
-
-<Typography
-  align="center"
-  color="text.secondary"
-  mt={4}
-  fontSize={12}
-color="text.secondary"
->
-  © 2026 TalentFlow
-</Typography>
-
-          
-
+          <Divider sx={{ my: 3 }}>OR</Divider>
+          <Typography sx={{ textAlign: "center", fontSize: "0.88rem" }}>New to TalentFlow? <Link component={RouterLink} to="/applicant/register" underline="hover" sx={{ color: "#2563EB", fontWeight: 700 }}>Register</Link></Typography>
+              <Typography align="center" color="text.secondary" mt={3} fontSize={12}>(c) 2026 TalentFlow</Typography>
         </Paper>
       </Container>
     </Box>

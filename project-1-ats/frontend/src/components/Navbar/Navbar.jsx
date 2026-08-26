@@ -31,6 +31,15 @@ export default function Navbar() {
     navigate("/choose-role", { replace: true });
   };
 
+  const handleSectionNavigation = (event, targetId) => {
+    event.preventDefault();
+    document.getElementById(targetId)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    setMobileOpen(false);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -42,11 +51,10 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { title: "Home", path: "/" },
-    { title: "Features", path: "#features" },
-    { title: "How It Works", path: "#how-it-works" },
-    { title: "Pricing", path: "#pricing" },
-    { title: "Contact", path: "#contact" },
+    { title: "Home", targetId: "home" },
+    { title: "Features", targetId: "features" },
+    { title: "How It Works", targetId: "how-it-works" },
+    { title: "Contact", targetId: "contact" },
   ];
 
   return (
@@ -109,7 +117,8 @@ export default function Navbar() {
               <Typography
                 key={link.title}
                 component="a"
-                href={link.path}
+                href={`#${link.targetId}`}
+                onClick={(event) => handleSectionNavigation(event, link.targetId)}
                 sx={{
                   textDecoration: "none",
                   color: "#475569",
@@ -183,7 +192,8 @@ export default function Navbar() {
               <ListItem
                 key={link.title}
                 component="a"
-                href={link.path}
+                href={`#${link.targetId}`}
+                onClick={(event) => handleSectionNavigation(event, link.targetId)}
               >
                 <ListItemText primary={link.title} />
               </ListItem>
@@ -191,6 +201,9 @@ export default function Navbar() {
           </List>
 
           <Button
+            component={Link}
+            to="/choose-role"
+            onClick={() => setMobileOpen(false)}
             fullWidth
             variant="contained"
             sx={{ mt: 2 }}

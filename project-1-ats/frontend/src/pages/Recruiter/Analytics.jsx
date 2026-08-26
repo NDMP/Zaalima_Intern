@@ -1,12 +1,9 @@
 import { Box, Typography, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../utils/api";
 
-import Sidebar from "../../components/Dashboard/Sidebar";
-import Topbar from "../../components/Dashboard/Topbar";
 import StatsCard from "../../components/Analytics/StatsCard";
 import AnalyticsChart from "../../components/Analytics/AnalyticsChart";
-import { getToken } from "../../utils/auth";
 
 import WorkIcon from "@mui/icons-material/Work";
 import GroupIcon from "@mui/icons-material/Group";
@@ -26,19 +23,9 @@ export default function Analytics() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const token = getToken();
-
         const [jobsRes, applicationsRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/jobs", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-          axios.get("http://localhost:5000/api/applications", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
+          api.get("/jobs"),
+          api.get("/applications"),
         ]);
 
         const jobs = jobsRes.data.data;
@@ -67,21 +54,15 @@ export default function Analytics() {
 
   return (
     <>
-      <Sidebar />
-      <Topbar />
-
       <Box
         sx={{
-          ml: "260px",
-          mt: "72px",
-          p: 4,
-          background: "#F8FAFC",
-          minHeight: "100vh",
+          width: "100%",
         }}
       >
-        <Typography variant="h4" fontWeight={700} mb={4}>
+        <Typography variant="h4" fontWeight={800} mb={1}>
           Analytics Dashboard
         </Typography>
+        <Typography color="text.secondary" mb={3}>Track your hiring funnel and understand where candidates are moving.</Typography>
 
         {/* Stats Cards */}
         <Grid container spacing={3}>
@@ -134,7 +115,7 @@ export default function Analytics() {
         {/* Pie Chart */}
         <Box
           sx={{
-            mt: 5,
+            mt: 4,
             p: 4,
             bgcolor: "#fff",
             borderRadius: 4,

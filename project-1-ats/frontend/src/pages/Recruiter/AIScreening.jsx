@@ -38,8 +38,6 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import WorkIcon from "@mui/icons-material/Work";
-import Sidebar from "../../components/Dashboard/Sidebar";
-import Topbar from "../../components/Dashboard/Topbar";
 import api from "../../utils/api";
 import { toast } from "react-toastify";
 import {
@@ -90,11 +88,7 @@ function SkillChips({ skills = [], color = "default" }) {
   }
 
   return (
-    <Box
-  display="flex"
-  gap={0.75}
-  sx={{ flexWrap: "wrap" }}
->
+    <Box display="flex" gap={0.75} flexWrap="wrap">
       {skills.map((skill) => (
         <Chip key={skill} label={skill} size="small" color={color} />
       ))}
@@ -380,23 +374,13 @@ const downloadPDF = () => {
 
   return (
     <>
-      <Sidebar />
-      <Topbar />
-
-      <Box
-        sx={{
-          ml: "260px",
-          mt: "90px",
-          p: 4,
-          background: "#F8FAFC",
-          minHeight: "100vh",
-        }}
-      >
-        <Typography variant="h4" fontWeight={700} mb={4}>
+      <Box sx={{ width: "100%", minWidth: 0 }}>
+        <Typography variant="h4" fontWeight={800} mb={1}>
           AI Screening
         </Typography>
+        <Typography color="text.secondary" mb={3}>Use AI to review candidate fit, compare skills, and move the best people forward.</Typography>
 
-        <Paper sx={{ p: 3, borderRadius: 3 }}>
+        <Paper sx={{ p: { xs: 2, sm: 3 }, borderRadius: 3, border: "1px solid #E2E8F0", boxShadow: "0 10px 30px rgba(15,23,42,.05)" }}>
           {jobsLoading ? (
             <Skeleton variant="rounded" height={56} />
           ) : (
@@ -421,11 +405,12 @@ const downloadPDF = () => {
   sx={{
     mt: 3,
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: { xs: "stretch", sm: "flex-end" },
   }}
 >
   <Button
     variant="contained"
+    sx={{ width: { xs: "100%", sm: "auto" }, borderRadius: 2, textTransform: "none" }}
     disabled={!selectedJob || loadingQuestions}
     onClick={() => {
       const job = jobs.find((j) => j._id === selectedJob);
@@ -442,7 +427,7 @@ const downloadPDF = () => {
 </Box>
 
 {questions && (
-  <Paper sx={{ mt: 3, p: 3, borderRadius: 3 }}>
+  <Paper sx={{ mt: 3, p: { xs: 2, sm: 3 }, borderRadius: 3, border: "1px solid #E2E8F0" }}>
     <Typography
       variant="h5"
       fontWeight={700}
@@ -550,12 +535,7 @@ const downloadPDF = () => {
               ))}
             </Grid>
 
-            <Box
-  display="flex"
-  gap={2}
-  mb={3}
-  sx={{ flexWrap: "wrap" }}
->
+            <Box display="flex" gap={2} mb={3} flexWrap="wrap">
               <TextField
                 label="Search Candidate"
                 placeholder="Name, email, or skills"
@@ -595,8 +575,8 @@ const downloadPDF = () => {
                 </Typography>
               </Paper>
             ) : (
-              <TableContainer component={Paper} sx={{ borderRadius: 3 }}>
-                <Table sx={{ minWidth: 1500 }}>
+              <TableContainer component={Paper} sx={{ borderRadius: 3, border: "1px solid #E2E8F0", overflowX: "auto" }}>
+                <Table sx={{ minWidth: 1150 }}>
                   <TableHead>
                     <TableRow>
                       <TableCell><b>Candidate</b></TableCell>
@@ -699,7 +679,7 @@ const downloadPDF = () => {
 
         <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
           {selectedCandidate && (
-            <Box sx={{ width: 460, p: 3 }}>
+            <Box sx={{ width: { xs: "min(100vw, 460px)", sm: 460 }, p: { xs: 2, sm: 3 } }}>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                 <Typography variant="h5" fontWeight="bold">Candidate Profile</Typography>
                 <IconButton onClick={() => setDrawerOpen(false)}>

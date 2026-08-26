@@ -39,7 +39,7 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <Box sx={{ py: 12, bgcolor: "#F8FAFC" }}>
+    <Box id="how-it-works" sx={{ py: 12, bgcolor: "#F8FAFC", scrollMarginTop: 88 }}>
       <Container maxWidth="xl">
 
         <Typography

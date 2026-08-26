@@ -9,6 +9,7 @@ import {
 
 import axios from "axios";
 import { getToken } from "../../utils/auth";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 
 export default function MyApplications() {
   const [applications, setApplications] = useState([]);
@@ -39,16 +40,16 @@ export default function MyApplications() {
   return (
     <Box
       sx={{
-        p: 4,
+        p: { xs: 1, sm: 2, md: 3 },
         background: "#F8FAFC",
-        minHeight: "100vh",
+        minHeight: "100%",
+        width: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
       }}
     >
-      <Typography
-        variant="h4"
-        fontWeight={700}
-        mb={4}
-      >
+      <Typography variant="h4" sx={{ color: "#0F172A", fontWeight: 800, mb: 3 }}>
+        <AssignmentTurnedInIcon sx={{ mr: 1, verticalAlign: "-5px", color: "#2563EB" }} />
         My Applications
       </Typography>
 
@@ -57,18 +58,22 @@ export default function MyApplications() {
           No applications submitted yet.
         </Typography>
       ) : (
-        applications.map((app) => (
+        applications.filter((app) => app.job?._id).map((app) => (
           <Paper
             key={app._id}
             sx={{
-              p: 3,
+              p: { xs: 2, sm: 2.5 },
               mb: 3,
-              borderRadius: 4,
+              borderRadius: 3,
+              border: "1px solid #E2E8F0",
+              boxShadow: "0 2px 8px rgba(15,23,42,.04)",
+              transition: "border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease",
+              "&:hover": { borderColor: "#BFDBFE", boxShadow: "0 8px 20px rgba(15,23,42,.08)", transform: "translateY(-2px)" },
             }}
           >
             <Typography
               variant="h6"
-              fontWeight={700}
+              sx={{ color: "#0F172A", fontWeight: 800, overflowWrap: "anywhere" }}
             >
               {app.job?.title}
             </Typography>
@@ -79,8 +84,10 @@ export default function MyApplications() {
 
             <Stack
               direction="row"
-              spacing={2}
+              spacing={1.25}
               mt={2}
+              flexWrap="wrap"
+              useFlexGap
             >
               <Chip
                 label={app.status}

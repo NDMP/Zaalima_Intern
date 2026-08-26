@@ -1,8 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Sidebar from "../../components/Dashboard/Sidebar";
-import Topbar from "../../components/Dashboard/Topbar";
 import { JobContext } from "../../context/JobContext";
 import api from "../../utils/api";
 
@@ -20,32 +18,44 @@ import {
   Button,
 } from "@mui/material";
 
-export default function CreateJob() { 
+export default function CreateJob() {
   const initialJobData = {
-  title: "",
-  company: "",
-  location: "",
-  employmentType: "",
-  experience: "",
-  vacancies: "",
-  minSalary: "",
-  maxSalary: "",
-  skills: "",
-  description: "",
-  requirements: "",
-  benefits: "",
-  deadline: "",
-  workMode: "",
-  aiScreening: true,
-};
-    const [jobData, setJobData] = useState(initialJobData);
-const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState({});
-const {
-  editingJob,
-  setEditingJob,
-} = useContext(JobContext);
-const navigate = useNavigate(); 
+    title: "",
+    company: "",
+    location: "",
+    employmentType: "",
+    experience: "",
+    vacancies: "",
+    minSalary: "",
+    maxSalary: "",
+    skills: "",
+    description: "",
+    requirements: "",
+    benefits: "",
+    deadline: "",
+    workMode: "",
+    aiScreening: true,
+  };
+
+  const dropdownMenuProps = {
+    PaperProps: {
+      sx: {
+        zIndex: 2000,
+        mt: 1,
+        borderRadius: 2,
+        boxShadow: "0 18px 40px rgba(15, 23, 42, 0.12)",
+      },
+    },
+    MenuListProps: {
+      sx: { py: 0.5 },
+    },
+  };
+
+  const [jobData, setJobData] = useState(initialJobData);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const { editingJob, setEditingJob } = useContext(JobContext);
+  const navigate = useNavigate();
 const handleChange = (event) => {
   const { name, value, type, checked } = event.target;
 
@@ -73,7 +83,6 @@ const handleSubmit = async () => {
 
 toast.error("Job Title is required");
 return;
-  return;
 }
 
   if (!jobData.company.trim()) {
@@ -183,25 +192,19 @@ setLoading(true);
 };
   return (
     <>
-      <Sidebar />
-      <Topbar />
-
       <Box
   sx={{
-    ml: "260px",
-    mt: "72px",
-    p: 4,
-    width: "calc(100% - 260px)",
-    boxSizing: "border-box",
+    width: "100%",
   }}
 >
         <Typography
   variant="h4"
-  fontWeight={700}
-  mb={4}
+  fontWeight={800}
+  mb={1}
 >
   {editingJob ? "Update Job" : "Create New Job"}
 </Typography>
+        <Typography color="text.secondary" mb={3}>Add the details candidates need to understand this opportunity.</Typography>
 
         <Paper
   sx={{
@@ -209,6 +212,8 @@ setLoading(true);
     borderRadius: 4,
     maxWidth: 1100,
     mx: "auto",
+    border: "1px solid #E2E8F0",
+    boxShadow: "0 12px 32px rgba(15,23,42,.05)",
   }}
 >
           <Grid container spacing={3}>
@@ -259,16 +264,19 @@ setLoading(true);
   name="employmentType"
   value={jobData.employmentType}
   onChange={handleChange}
+  SelectProps={{ MenuProps: dropdownMenuProps }}
+  sx={{
+    "& .MuiOutlinedInput-root": {
+      backgroundColor: "#fff",
+      borderRadius: 2,
+    },
+  }}
 >
   <MenuItem value="Full Time">Full Time</MenuItem>
   <MenuItem value="Part Time">Part Time</MenuItem>
   <MenuItem value="Internship">Internship</MenuItem>
   <MenuItem value="Contract">Contract</MenuItem>
 </TextField>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              
             </Grid>
 
      <Grid item xs={12} md={4}>
@@ -382,6 +390,13 @@ setLoading(true);
   name="workMode"
   value={jobData.workMode}
   onChange={handleChange}
+  SelectProps={{ MenuProps: dropdownMenuProps }}
+  sx={{
+    "& .MuiOutlinedInput-root": {
+      backgroundColor: "#fff",
+      borderRadius: 2,
+    },
+  }}
 >
   <MenuItem value="Remote">Remote</MenuItem>
   <MenuItem value="Hybrid">Hybrid</MenuItem>
@@ -410,12 +425,13 @@ setLoading(true);
                   gap: 2,
                 }}
               >
-                <Button variant="outlined">
+                <Button variant="outlined" sx={{ borderRadius: 2, textTransform: "none" }}>
                   Save Draft
                 </Button>
 
                 <Button
   variant="contained"
+  sx={{ borderRadius: 2, textTransform: "none", px: 3 }}
   onClick={handleSubmit}
   disabled={loading}
 >

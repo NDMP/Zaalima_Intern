@@ -2,8 +2,7 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
+  Paper,
   Divider,
   Grid,
   TextField,
@@ -16,114 +15,226 @@ export default function ProfileSettings({
   saveSettings,
 }) {
   return (
-    <Card
+    <Paper
+      elevation={0}
       sx={{
-        borderRadius: 4,
+        borderRadius: 3,
+        border: "1px solid #E2E8F0",
+        bgcolor: "#FFFFFF",
+        overflow: "hidden",
       }}
     >
-      <CardContent>
-
+      {/* Header with Avatar */}
+      <Box
+        sx={{
+          p: { xs: 2, sm: 3 },
+          textAlign: "center",
+          bgcolor: "#F8FAFC",
+          borderBottom: "1px solid #E2E8F0",
+        }}
+      >
         <Typography
-          variant="h5"
-          fontWeight={700}
-          mb={3}
+          variant="h6"
+          fontWeight={800}
+          mb={2}
+          sx={{ color: "#0F172A" }}
         >
           Profile Settings
         </Typography>
 
-        <Box
-          display="flex"
-          justifyContent="center"
-          mb={4}
+        <Avatar
+          sx={{
+            width: 90,
+            height: 90,
+            fontSize: 36,
+            bgcolor: "#2563EB",
+            color: "#fff",
+            fontWeight: 800,
+            mx: "auto",
+          }}
         >
-          <Avatar
-            sx={{
-              width: 90,
-              height: 90,
-              fontSize: 36,
-            }}
-          >
-            {user.name?.[0]}
-          </Avatar>
-        </Box>
+          {user.name?.[0]?.toUpperCase()}
+        </Avatar>
 
-        <Divider sx={{ mb: 4 }} />
+        <Typography
+          variant="body2"
+          sx={{
+            mt: 1.5,
+            color: "#64748B",
+            fontSize: "0.85rem",
+          }}
+        >
+          {user.email}
+        </Typography>
+      </Box>
 
-        <Grid container spacing={3}>
-
-          <Grid size={{ xs: 12, md: 6 }}>
+      {/* Form Content */}
+      <Box sx={{ p: { xs: 2, sm: 3 } }}>
+        <Grid container spacing={2.5}>
+          <Grid item xs={12} md={6}>
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                color: "#0F172A",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                mb: 1,
+              }}
+            >
+              Full Name
+            </Typography>
             <TextField
               fullWidth
-              label="Full Name"
               value={user.name}
-              onChange={(e)=>
+              onChange={(e) =>
                 setUser({
                   ...user,
-                  name:e.target.value
+                  name: e.target.value,
                 })
               }
+              placeholder="Your full name"
+              variant="outlined"
+              size="small"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                  fontSize: "0.9rem",
+                },
+              }}
             />
           </Grid>
 
-          <Grid size={{ xs:12, md:6 }}>
+          <Grid item xs={12} md={6}>
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                color: "#0F172A",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                mb: 1,
+              }}
+            >
+              Email
+            </Typography>
             <TextField
               fullWidth
-              label="Email"
+              type="email"
               value={user.email}
-              onChange={(e)=>
+              onChange={(e) =>
                 setUser({
                   ...user,
-                  email:e.target.value
+                  email: e.target.value,
                 })
               }
+              placeholder="your@email.com"
+              variant="outlined"
+              size="small"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                  fontSize: "0.9rem",
+                },
+              }}
             />
           </Grid>
 
-          <Grid size={{ xs:12, md:6 }}>
+          <Grid item xs={12} md={6}>
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                color: "#0F172A",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                mb: 1,
+              }}
+            >
+              Company Name
+            </Typography>
             <TextField
               fullWidth
-              label="Company Name"
               value={user.companyName}
-              onChange={(e)=>
+              onChange={(e) =>
                 setUser({
                   ...user,
-                  companyName:e.target.value
+                  companyName: e.target.value,
                 })
               }
+              placeholder="Your company name"
+              variant="outlined"
+              size="small"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                  fontSize: "0.9rem",
+                },
+              }}
             />
           </Grid>
 
-          <Grid size={{ xs:12, md:6 }}>
+          <Grid item xs={12} md={6}>
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                color: "#0F172A",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+                mb: 1,
+              }}
+            >
+              Designation
+            </Typography>
             <TextField
               fullWidth
-              label="Designation"
               value={user.designation}
-              onChange={(e)=>
+              onChange={(e) =>
                 setUser({
                   ...user,
-                  designation:e.target.value
+                  designation: e.target.value,
                 })
               }
+              placeholder="Your designation"
+              variant="outlined"
+              size="small"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 2,
+                  fontSize: "0.9rem",
+                },
+              }}
             />
           </Grid>
-          
-
         </Grid>
 
+        {/* Save Button */}
         <Button
           variant="contained"
           fullWidth
-          sx={{
-            mt:4,
-            py:1.5,
-            borderRadius:2,
-          }}
           onClick={saveSettings}
+          sx={{
+            mt: 3,
+            minHeight: 44,
+            borderRadius: 2,
+            textTransform: "none",
+            fontWeight: 700,
+            fontSize: "0.9rem",
+            backgroundColor: "#2563EB",
+            color: "#fff",
+            boxShadow: "0 2px 8px rgba(23, 59, 120, 0.15)",
+            transition: "all 160ms ease",
+            "&:hover": {
+              backgroundColor: "#1D4ED8",
+              transform: "translateY(-1px)",
+              boxShadow: "0 4px 12px rgba(23, 59, 120, 0.25)",
+            },
+          }}
         >
           Save Changes
         </Button>
-
-      </CardContent>
-    </Card>
+      </Box>
+    </Paper>
   );
 }

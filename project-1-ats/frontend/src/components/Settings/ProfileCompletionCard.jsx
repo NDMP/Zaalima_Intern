@@ -1,14 +1,13 @@
 import {
-  Card,
-  CardContent,
+  Paper,
   Typography,
   LinearProgress,
   Box,
-  Stack,
+  Chip,
 } from "@mui/material";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
+import AlertIcon from "@mui/icons-material/InfoOutlined";
 
 export default function ProfileCompletionCard({ user }) {
   const fields = [
@@ -29,88 +28,203 @@ export default function ProfileCompletionCard({ user }) {
     (completedFields / fields.length) * 100
   );
 
-  const getColor = () => {
+  const getProgressColor = () => {
+    if (completion >= 80) return "#10B981";
+    if (completion >= 50) return "#F59E0B";
+    return "#DC2626";
+  };
+
+  const getStatusColor = () => {
     if (completion >= 80) return "success";
     if (completion >= 50) return "warning";
     return "error";
   };
 
   return (
-    <Card
+    <Paper
+      elevation={0}
       sx={{
-        mb: 3,
+        p: { xs: 2, sm: 2.5 },
         borderRadius: 3,
-        boxShadow: 2,
+        border: "1px solid #E2E8F0",
+        bgcolor: "#F8FAFC",
+        mb: 3,
+        transition: "all 160ms ease",
+        "&:hover": {
+          borderColor: "#BFDBFE",
+          boxShadow: "0 4px 16px rgba(15, 23, 42, 0.06)",
+        },
       }}
     >
-      <CardContent>
-        <Typography
-          variant="h5"
-          fontWeight={700}
-          gutterBottom
+      <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2, mb: 2 }}>
+        <Box
+          sx={{
+            width: 40,
+            height: 40,
+            borderRadius: 2,
+            bgcolor: "#EFF6FF",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#1D4ED8",
+            flexShrink: 0,
+          }}
         >
-          👤 Profile Completion
-        </Typography>
+          <AlertIcon sx={{ fontSize: "1.2rem" }} />
+        </Box>
 
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          mb={2}
-        >
-          Complete your recruiter profile to build trust with candidates.
-        </Typography>
-
-        <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography fontWeight={600}>
-            {completion}% Completed
+        <Box sx={{ flex: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              mb: 0.5,
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+            }}
+          >
+            <Typography
+              variant="h6"
+              fontWeight={800}
+              sx={{ color: "#0F172A", fontSize: "0.95rem" }}
+            >
+              Complete Your Profile
+            </Typography>
+            <Chip
+              label={`${completion}% Complete`}
+              size="small"
+              sx={{
+                bgcolor:
+                  completion >= 80
+                    ? "#ECFDF5"
+                    : completion >= 50
+                    ? "#FFFBEB"
+                    : "#FEF2F2",
+                color:
+                  completion >= 80
+                    ? "#047857"
+                    : completion >= 50
+                    ? "#92400E"
+                    : "#991B1B",
+                fontWeight: 700,
+                fontSize: "0.75rem",
+                borderRadius: 1,
+              }}
+            />
+          </Box>
+          <Typography
+            variant="body2"
+            sx={{
+              color: "#64748B",
+              fontSize: "0.85rem",
+              lineHeight: 1.4,
+            }}
+          >
+            Build credibility with candidates by completing your profile information.
           </Typography>
+        </Box>
+      </Box>
 
-          <Typography color="text.secondary">
+      {/* Progress Bar */}
+      <Box sx={{ mb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 0.75,
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{
+              color: "#64748B",
+              fontSize: "0.8rem",
+              fontWeight: 600,
+            }}
+          >
+            Progress
+          </Typography>
+          <Typography
+            variant="caption"
+            sx={{
+              color: "#0F172A",
+              fontSize: "0.8rem",
+              fontWeight: 700,
+            }}
+          >
             {completedFields}/{fields.length} Fields
           </Typography>
         </Box>
-
         <LinearProgress
           variant="determinate"
           value={completion}
-          color={getColor()}
           sx={{
-            height: 10,
-            borderRadius: 5,
-            mb: 3,
+            height: 6,
+            borderRadius: 10,
+            bgcolor: "#E2E8F0",
+            "& .MuiLinearProgress-bar": {
+              borderRadius: 10,
+              backgroundColor: getProgressColor(),
+            },
           }}
         />
+      </Box>
 
-        <Stack spacing={1}>
-          {fields.map((field) => (
-            <Box
-              key={field.label}
-              display="flex"
-              alignItems="center"
-              gap={1}
+      {/* Field Status */}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+          gap: 1,
+        }}
+      >
+        {fields.map((field) => (
+          <Box
+            key={field.label}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.75,
+              p: 1,
+              borderRadius: 1.5,
+              bgcolor: "#FFFFFF",
+              border: "1px solid #E2E8F0",
+            }}
+          >
+            {field.value ? (
+              <CheckCircleIcon
+                sx={{
+                  fontSize: "0.9rem",
+                  color: "#10B981",
+                  flexShrink: 0,
+                }}
+              />
+            ) : (
+              <Box
+                sx={{
+                  width: "0.9rem",
+                  height: "0.9rem",
+                  borderRadius: "50%",
+                  border: "2px solid #CBD5E1",
+                  flexShrink: 0,
+                }}
+              />
+            )}
+
+            <Typography
+              sx={{
+                fontSize: "0.8rem",
+                color: field.value ? "#0F172A" : "#64748B",
+                fontWeight: field.value ? 600 : 400,
+              }}
             >
-              {field.value ? (
-                <CheckCircleIcon color="success" fontSize="small" />
-              ) : (
-                <CancelIcon color="error" fontSize="small" />
-              )}
-
-              <Typography>{field.label}</Typography>
-            </Box>
-          ))}
-        </Stack>
-
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          mt={3}
-        >
-          Last Updated:{" "}
-          {user.updatedAt
-            ? new Date(user.updatedAt).toLocaleDateString()
-            : "Today"}
-        </Typography>
-      </CardContent>
-    </Card>
+              {field.label}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    </Paper>
   );
 }

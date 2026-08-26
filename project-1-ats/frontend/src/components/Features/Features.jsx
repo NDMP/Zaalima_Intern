@@ -48,9 +48,11 @@ const features = [
 export default function Features() {
   return (
     <Box
+      id="features"
       sx={{
         py: 12,
         bgcolor: "#F8FAFC",
+        scrollMarginTop: 88,
       }}
     >
       <Container maxWidth="xl">

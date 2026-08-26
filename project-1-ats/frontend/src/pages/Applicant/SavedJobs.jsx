@@ -12,6 +12,8 @@ export default function SavedJobs() {
 
   useEffect(() => {
     fetchSavedJobs();
+    window.addEventListener("saved-jobs-updated", fetchSavedJobs);
+    return () => window.removeEventListener("saved-jobs-updated", fetchSavedJobs);
   }, []);
 
   const fetchSavedJobs = async () => {
@@ -26,15 +28,14 @@ export default function SavedJobs() {
   return (
     <Box
       sx={{
-        p: 4,
-        background: "#F8FAFC",
-        minHeight: "100vh",
+        width: "100%",
       }}
     >
       <Typography
         variant="h4"
         fontWeight={700}
-        mb={4}
+        mb={3}
+        sx={{ color: "#0F172A", fontWeight: 800 }}
       >
         ❤️ Saved Jobs
       </Typography>

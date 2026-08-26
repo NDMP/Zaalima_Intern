@@ -6,12 +6,22 @@ import {
   TextField,
   Button,
   Paper,
+  Autocomplete,
+  Link as MuiLink,
 } from "@mui/material";
 import api from "../../utils/api";
 import { toast } from "react-toastify";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";  
 import LinearProgress from "@mui/material/LinearProgress";
 import Avatar from "@mui/material/Avatar";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
+
+const skillOptions = [
+  "React", "JavaScript", "TypeScript", "HTML", "CSS", "Node.js", "Express",
+  "Python", "Java", "C#", ".NET", "ASP.NET", "SQL", "MongoDB", "Git",
+  "Figma", "UI/UX Design", "AWS", "Docker", "REST API", "Machine Learning",
+];
 
 export default function Profile() {
   const [user, setUser] = useState({
@@ -62,6 +72,11 @@ const IMAGE_URL = API_URL.replace(
   /\/api\/?$/,
   "/uploads"
 );
+
+  const normalizeUrl = (value) => {
+    if (!value) return "";
+    return /^https?:\/\//i.test(value) ? value : `https://${value}`;
+  };
 
   useEffect(() => {
     fetchProfile();
@@ -173,104 +188,57 @@ const IMAGE_URL = API_URL.replace(
   return (
     <Box
       sx={{
-        p: 4,
-        background: "#F8FAFC",
-        minHeight: "100vh",
+        width: "100%",
       }}
     >
-      <Box
-  display="flex"
-  flexDirection="column"
-  alignItems="center"
-  mb={4}
->
-  <Avatar
-    src={
-      user.profileImage
-        ? `${IMAGE_URL}/${user.profileImage}`
-        : ""
-    }
-    sx={{
-      width: 120,
-      height: 120,
-      mb: 2,
-    }}
-  />
-
-  <Button
-    component="label"
-    variant="outlined"
-    startIcon={<CloudUploadIcon />}
-  >
-    Choose Photo
-
-    <input
-      hidden
-      type="file"
-      accept="image/*"
-      onChange={(e) =>
-        setProfileImage(
-          e.target.files[0]
-        )
-      }
-    />
-  </Button>
-
-  <Button
-    sx={{ mt: 2 }}
-    variant="contained"
-    onClick={uploadProfileImage}
-  >
-    Upload Photo
-  </Button>
-</Box>
-      <Typography variant="h4" fontWeight={700} mb={4}>
+      <Typography variant="h4" sx={{ color: "#0F172A", fontWeight: 800, mb: 3 }}>
         My Profile
       </Typography>
-      <Box
-  sx={{
-    mb: 4,
-    mt: 3,
-    p: 3,
-    bgcolor: "#fff",
-    borderRadius: 3,
-  }}
->
-  <Typography
-    fontWeight={700}
-    mb={1}
-  >
-    Profile Completion
-  </Typography>
 
-  <LinearProgress
-    variant="determinate"
-    value={calculateCompletion()}
-    sx={{
-      height: 10,
-      borderRadius: 10,
-    }}
-  />
+      <Grid container spacing={3} sx={{ mb: 3 }}>
+        <Grid size={{ xs: 12, md: 5 }}>
+          <Paper sx={{ p: { xs: 2.5, sm: 3 }, height: "100%", borderRadius: 3, border: "1px solid #E2E8F0", boxShadow: "0 2px 8px rgba(15,23,42,.04)", transition: "border-color 180ms ease, box-shadow 180ms ease", "&:hover": { borderColor: "#BFDBFE", boxShadow: "0 8px 20px rgba(15,23,42,.08)" } }}>
+            <Typography sx={{ display: "flex", alignItems: "center", gap: 1, color: "#0F172A", fontWeight: 800, mb: 2 }}><PhotoCameraIcon sx={{ color: "#2563EB" }} /> Profile Photo</Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2.5, flexWrap: "wrap" }}>
+              <Avatar
+                src={user.profileImage ? `${IMAGE_URL}/${user.profileImage}` : ""}
+                sx={{ width: 96, height: 96, bgcolor: "#DBEAFE", color: "#2563EB", fontSize: 30, fontWeight: 700 }}
+              />
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25, flex: 1, minWidth: 160 }}>
+                <Button component="label" variant="outlined" startIcon={<CloudUploadIcon />} sx={{ minHeight: 44, borderColor: "#2563EB", color: "#2563EB", fontWeight: 700, borderRadius: 2, "&:hover": { borderColor: "#1D4ED8", bgcolor: "#EFF6FF" } }}>
+                  Choose Photo
+                  <input hidden type="file" accept="image/*" onChange={(e) => setProfileImage(e.target.files[0])} />
+                </Button>
+                <Button variant="contained" onClick={uploadProfileImage} sx={{ minHeight: 44, bgcolor: "#2563EB", fontWeight: 700, borderRadius: 2, "&:hover": { bgcolor: "#1D4ED8" } }}>
+                  Upload Photo
+                </Button>
+              </Box>
+            </Box>
+          </Paper>
+        </Grid>
+        <Grid size={{ xs: 12, md: 7 }}>
+          <Paper sx={{ p: { xs: 2.5, sm: 3 }, height: "100%", borderRadius: 3, border: "1px solid #E2E8F0", boxShadow: "0 2px 8px rgba(15,23,42,.04)", transition: "border-color 180ms ease, box-shadow 180ms ease", "&:hover": { borderColor: "#BFDBFE", boxShadow: "0 8px 20px rgba(15,23,42,.08)" } }}>
+            <Typography sx={{ display: "flex", alignItems: "center", gap: 1, color: "#0F172A", fontWeight: 800, mb: 1.5 }}><TaskAltIcon sx={{ color: "#2563EB" }} /> Profile Completion</Typography>
+            <LinearProgress variant="determinate" value={calculateCompletion()} sx={{ height: 10, borderRadius: 10, bgcolor: "#E2E8F0", "& .MuiLinearProgress-bar": { bgcolor: "#2563EB", borderRadius: 10 } }} />
+            <Typography mt={1.25} color="text.secondary">{calculateCompletion()}% Completed</Typography>
+          </Paper>
+        </Grid>
+      </Grid>
 
-  <Typography
-    mt={1}
-    color="text.secondary"
-  >
-    {calculateCompletion()}% Completed
-  </Typography>
-</Box>
-
-      <Paper sx={{ p: 4, borderRadius: 3 }}>
+      <Paper sx={{ p: { xs: 2.5, sm: 4 }, borderRadius: 3, border: "1px solid #E2E8F0", boxShadow: "0 2px 8px rgba(15,23,42,.04)", transition: "border-color 180ms ease, box-shadow 180ms ease", "&:hover": { borderColor: "#BFDBFE", boxShadow: "0 8px 20px rgba(15,23,42,.08)" } }}>
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              label="Full Name"
-              value={user.name}
-              onChange={(e) =>
-                setUser({ ...user, name: e.target.value })
-              }
-            />
+            <TextField fullWidth label="Full Name" value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })} />
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, p: 2, borderRadius: 2, bgcolor: "#F8FAFC", border: "1px solid #E2E8F0" }}>
+              {["portfolio", "linkedin", "github"].map((key) => user[key] && (
+                <MuiLink key={key} href={normalizeUrl(user[key])} target="_blank" rel="noreferrer" sx={{ color: "#2563EB", fontWeight: 700, overflowWrap: "anywhere" }}>
+                  {key === "linkedin" ? "LinkedIn" : key[0].toUpperCase() + key.slice(1)} -&gt;
+                </MuiLink>
+              ))}
+            </Box>
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
@@ -342,13 +310,14 @@ const IMAGE_URL = API_URL.replace(
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              label="Skills"
-              value={user.skills}
-              onChange={(e) =>
-                setUser({ ...user, skills: e.target.value })
-              }
+            <Autocomplete
+              multiple
+              freeSolo
+              options={skillOptions}
+              value={user.skills.split(",").map((skill) => skill.trim()).filter(Boolean)}
+              onChange={(_, values) => setUser({ ...user, skills: values.join(", ") })}
+              filterSelectedOptions
+              renderInput={(params) => <TextField {...params} fullWidth label="Skills" placeholder="Type a skill and choose an option" />}
             />
           </Grid>
 
@@ -382,6 +351,7 @@ const IMAGE_URL = API_URL.replace(
     variant="outlined"
     component="label"
     startIcon={<CloudUploadIcon />}
+    sx={{ borderColor: "#2563EB", color: "#2563EB", fontWeight: 700, borderRadius: 2 }}
   >
     Choose Resume
 
@@ -402,9 +372,9 @@ const IMAGE_URL = API_URL.replace(
   )}
 
   <Button
-    sx={{ mt: 2, ml: 2 }}
     variant="contained"
     onClick={uploadResume}
+    sx={{ mt: 2, ml: { xs: 0, sm: 2 }, bgcolor: "#2563EB", fontWeight: 700, borderRadius: 2, "&:hover": { bgcolor: "#1D4ED8" } }}
   >
     Upload Resume
   </Button>
@@ -419,7 +389,7 @@ const IMAGE_URL = API_URL.replace(
       href={`http://localhost:5000/uploads/${user.resume}`}
       target="_blank"
       variant="outlined"
-      sx={{ mt: 1, mr: 2 }}
+      sx={{ mt: 1, mr: 2, borderColor: "#2563EB", color: "#2563EB", fontWeight: 700 }}
     >
       View Resume
     </Button>
@@ -441,6 +411,7 @@ const IMAGE_URL = API_URL.replace(
             <Button
               variant="contained"
               onClick={saveProfile}
+              sx={{ minHeight: 46, px: 3, bgcolor: "#2563EB", fontWeight: 700, borderRadius: 2, "&:hover": { bgcolor: "#1D4ED8" } }}
             >
               Save Profile
             </Button>

@@ -4,182 +4,201 @@ import {
   Snackbar,
   Alert,
   Typography,
+  Tabs,
+  Tab,
+  Paper,
 } from "@mui/material";
-import Sidebar from "../../components/Dashboard/Sidebar";
-import Topbar from "../../components/Dashboard/Topbar";
 import CompanySettings from "../../components/Settings/CompanySettings";
 import api from "../../utils/api";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import ProfileSettings from "../../components/Settings/ProfileSettings";
 import SecuritySettings from "../../components/Settings/SecuritySettings";
 import NotificationSettings from "../../components/Settings/NotificationSettings";
 import { getToken, saveAuthSession } from "../../utils/auth";
 import ProfileCompletionCard from "../../components/Settings/ProfileCompletionCard";
+
 export default function Settings() {
   const [user, setUser] = useState({
-  name: "",
-  email: "",
-  companyName: "",
-  designation: "",
-  website: "",
-  address: "",
-  updatedAt: "",
-  description: "",
-   notifications: {
-    emailOnApplication: true,
-    aiScreeningComplete: true,
-    interviewReminder: true,
-    weeklySummary: false,
-  },
-    
-    
-});
-const [tab, setTab] = useState(0);
-useEffect(() => {
-  fetchSettings();
-}, []);
-const [snackbar, setSnackbar] = useState({
-  open: false,
-  severity: "success",
-  message: "",
-});
-
-const fetchSettings = async () => {
-  try {
-    const { data } = await api.get("/settings");
-
-    setUser({
-  name: data.user.name,
-  updatedAt: data.user.updatedAt,
-  email: data.user.email,
-  companyName: data.user.recruiterProfile.companyName,
-  designation: data.user.recruiterProfile.designation,
-  website: data.user.recruiterProfile.website || "",
-  address: data.user.recruiterProfile.address || "",
-  description: data.user.recruiterProfile.description || "",
-  notifications:
-    data.user.recruiterProfile.notifications || {
+    name: "",
+    email: "",
+    companyName: "",
+    designation: "",
+    website: "",
+    address: "",
+    updatedAt: "",
+    description: "",
+    notifications: {
       emailOnApplication: true,
       aiScreeningComplete: true,
       interviewReminder: true,
       weeklySummary: false,
     },
-});
-  } catch (error) {
-    console.log(error);
-  }
-};
+  });
 
-const saveSettings = async () => {
-  try {
-    const { data } = await api.put("/settings", user);
+  const [tab, setTab] = useState(0);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "",
+  });
 
-    saveAuthSession({
-      token: getToken(),
-      user: data.user,
-    });
+  useEffect(() => {
+    fetchSettings();
+  }, []);
 
-    setSnackbar({
-      open: true,
-      severity: "success",
-      message: "Profile updated successfully!",
-    });
+  const fetchSettings = async () => {
+    try {
+      const { data } = await api.get("/settings");
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 1200);
+      setUser({
+        name: data.user.name,
+        updatedAt: data.user.updatedAt,
+        email: data.user.email,
+        companyName: data.user.recruiterProfile.companyName,
+        designation: data.user.recruiterProfile.designation,
+        website: data.user.recruiterProfile.website || "",
+        address: data.user.recruiterProfile.address || "",
+        description: data.user.recruiterProfile.description || "",
+        notifications:
+          data.user.recruiterProfile.notifications || {
+            emailOnApplication: true,
+            aiScreeningComplete: true,
+            interviewReminder: true,
+            weeklySummary: false,
+          },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  } catch (error) {
-    setSnackbar({
-      open: true,
-      severity: "error",
-      message: "Failed to update profile.",
-    });
-  }
-};
+  const saveSettings = async () => {
+    try {
+      const { data } = await api.put("/settings", user);
+
+      saveAuthSession({
+        token: getToken(),
+        user: data.user,
+      });
+
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: "Profile updated successfully!",
+      });
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1200);
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: "Failed to update profile.",
+      });
+    }
+  };
 
   return (
-    <>
-      <Sidebar />
-      <Topbar />
+    <Box sx={{ width: "100%" }}>
+      {/* Header Section */}
+      <Box sx={{ mb: 3 }}>
+        <Typography
+          variant="h4"
+          fontWeight={800}
+          sx={{
+            fontSize: { xs: "1.75rem", md: "2rem" },
+            color: "#0F172A",
+            mb: 0.5,
+          }}
+        >
+          Settings
+        </Typography>
+        <Typography
+          color="text.secondary"
+          sx={{ color: "#64748B" }}
+        >
+          Keep your recruiter profile, company information, and notifications up to date.
+        </Typography>
+      </Box>
 
-      <Box
+      {/* Tabs Navigation */}
+      <Paper
+        elevation={0}
         sx={{
-          ml: "260px",
-          mt: "72px",
-          p: 4,
-          background: "#F8FAFC",
-          minHeight: "100vh",
+          borderRadius: 3,
+          border: "1px solid #E2E8F0",
+          bgcolor: "#FFFFFF",
+          mb: 3,
         }}
       >
-        <Typography variant="h4" fontWeight={700} mb={3}>
-  Settings
-</Typography>
-<Tabs
-  value={tab}
-  onChange={(e, value) => setTab(value)}
-  sx={{ mb: 3 }}
->
-  <Tab label="Profile" />
-  <Tab label="Security" />
-  <Tab label="Company" />
-  <Tab label="Notifications" />
-</Tabs>
+        <Tabs
+          value={tab}
+          onChange={(e, value) => setTab(value)}
+          variant="fullWidth"
+          sx={{
+            "& .MuiTabs-indicator": {
+              bgcolor: "#2563EB",
+              height: 3,
+            },
+            "& .MuiTab-root": {
+              textTransform: "none",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              color: "#64748B",
+              transition: "all 160ms ease",
+              "&.Mui-selected": {
+                color: "#2563EB",
+              },
+            },
+          }}
+        >
+          <Tab label="Profile" />
+          <Tab label="Company" />
+          <Tab label="Security" />
+          <Tab label="Notifications" />
+        </Tabs>
+      </Paper>
 
-{tab === 0 && (
-  <>
-    <ProfileCompletionCard user={user} />
+      {/* Tab Content */}
+      {tab === 0 && (
+        <>
+          <ProfileCompletionCard user={user} />
+          <Box sx={{ mt: 2.5 }}>
+            <ProfileSettings
+              user={user}
+              setUser={setUser}
+              saveSettings={saveSettings}
+            />
+          </Box>
+        </>
+      )}
 
-    <ProfileSettings
-      user={user}
-      setUser={setUser}
-      saveSettings={saveSettings}
-    />
-  </>
-)}
+      {tab === 1 && (
+        <CompanySettings
+          user={user}
+          setUser={setUser}
+          saveSettings={saveSettings}
+        />
+      )}
 
-{tab === 1 && (
-  <SecuritySettings />
-)}
+      {tab === 2 && <SecuritySettings />}
 
-{tab === 2 && (
-  <CompanySettings
-    user={user}
-    setUser={setUser}
-    saveSettings={saveSettings}
-  />
-)}
+      {tab === 3 && (
+        <NotificationSettings
+          user={user}
+          setUser={setUser}
+          saveSettings={saveSettings}
+        />
+      )}
 
-{tab === 3 && (
-  <NotificationSettings
-    user={user}
-    setUser={setUser}
-    saveSettings={saveSettings}
-  />
-)}
-      </Box>
+      {/* Snackbar Notification */}
       <Snackbar
-  open={snackbar.open}
-  autoHideDuration={3000}
-  onClose={() =>
-    setSnackbar({
-      ...snackbar,
-      open: false,
-    })
-  }
-  anchorOrigin={{
-    vertical: "top",
-    horizontal: "right",
-  }}
->
-  <Alert
-    severity={snackbar.severity}
-    variant="filled"
-  >
-    {snackbar.message}
-  </Alert>
-</Snackbar>
-    </>
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+      </Snackbar>
+    </Box>
   );
 }

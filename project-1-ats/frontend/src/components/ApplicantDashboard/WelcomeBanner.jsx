@@ -26,9 +26,9 @@ export default function WelcomeBanner({
     <Paper
       elevation={0}
       sx={{
-        p: 4,
-        mb: 4,
-        borderRadius: 5,
+        p: { xs: 2.5, sm: 3 },
+        mb: 3,
+        borderRadius: 3,
         background:
           "linear-gradient(135deg,#2563EB,#4F46E5)",
         color: "#fff",
@@ -38,14 +38,15 @@ export default function WelcomeBanner({
       }}
     >
       <Box>
-        <Typography variant="h4" fontWeight={700}>
+        <Typography sx={{ fontSize: { xs: "1.35rem", sm: "1.7rem" }, lineHeight: 1.2, fontWeight: 800 }}>
           Welcome back, {name} 👋
         </Typography>
 
         <Typography
           sx={{
-            mt: 1,
+            mt: 0.75,
             opacity: 0.9,
+            fontSize: { xs: "0.86rem", sm: "0.95rem" },
           }}
         >
           Ready to land your next dream job?
@@ -54,10 +55,12 @@ export default function WelcomeBanner({
         <Chip
           label={`Profile Strength ${profileCompletion}%`}
           sx={{
-            mt: 3,
+            mt: 1.5,
             bgcolor: "#fff",
             color: "#2563EB",
             fontWeight: 700,
+            height: 28,
+            "& .MuiChip-label": { px: 1.25, fontSize: "0.72rem" },
           }}
         />
       </Box>
@@ -69,9 +72,9 @@ export default function WelcomeBanner({
             : ""
         }
         sx={{
-          width: 80,
-          height: 80,
-          fontSize: 30,
+          width: 56,
+          height: 56,
+          fontSize: 22,
           bgcolor: "#fff",
           color: "#2563EB",
         }}

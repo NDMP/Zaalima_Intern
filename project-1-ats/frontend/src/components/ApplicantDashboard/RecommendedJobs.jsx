@@ -57,12 +57,14 @@ const fetchJobs = async () => {
         setSavedJobs((prev) =>
           prev.filter((id) => id !== jobId)
         );
+        window.dispatchEvent(new Event("saved-jobs-updated"));
 
         toast.success("Removed from Saved Jobs");
       } else {
         await api.post(`/jobs/${jobId}/save`);
 
         setSavedJobs((prev) => [...prev, jobId]);
+        window.dispatchEvent(new Event("saved-jobs-updated"));
 
         toast.success("Job Saved");
       }
@@ -93,60 +95,73 @@ const fetchJobs = async () => {
           <Paper
             key={job._id}
             sx={{
-              p: 3,
+              p: { xs: 2.5, sm: 3 },
               mb: 3,
-              borderRadius: 4,
+              borderRadius: 3,
               border: "1px solid #E5E7EB",
-              transition: "0.3s",
+              boxShadow: "0 2px 8px rgba(15, 23, 42, 0.04)",
+              transition: "box-shadow 180ms ease, transform 180ms ease",
               "&:hover": {
-                boxShadow: "0 12px 30px rgba(0,0,0,.08)",
+                boxShadow: "0 10px 24px rgba(15, 23, 42, 0.10)",
+                transform: "translateY(-2px)",
               },
             }}
           >
-            <Typography variant="h6" fontWeight={700}>
+            <Typography variant="h6" sx={{ color: "#0F172A", fontWeight: 800, lineHeight: 1.3, letterSpacing: "-0.01em" }}>
               {job.title}
             </Typography>
 
-            <Typography color="text.secondary" mb={2}>
+            <Typography color="text.secondary" mt={0.75} mb={2.25}>
               {job.company}
             </Typography>
 
             <Stack
-  direction="row"
-  spacing={1}
-  mb={2}
-  sx={{ flexWrap: "wrap" }}
->
-              <Chip label={job.location} />
+              direction="row"
+              spacing={1.25}
+              mb={2.25}
+              flexWrap="wrap"
+              useFlexGap
+            >
+              <Chip label={job.location} sx={{ fontWeight: 500 }} />
 
               <Chip
                 label={job.workMode}
                 color="success"
+                sx={{ fontWeight: 500 }}
               />
 
               <Chip
                 label={job.employmentType}
                 color="primary"
+                sx={{ fontWeight: 500 }}
               />
             </Stack>
 
-            <Typography fontWeight={600} mb={2}>
-              ₹ {job.minSalary} - ₹ {job.maxSalary}
+            <Typography color="#334155" fontWeight={700} mb={2.5}>
+              INR {job.minSalary} - INR {job.maxSalary}
             </Typography>
 
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center",
-                mt: 2,
+                alignItems: { xs: "stretch", sm: "center" },
+                gap: 2,
+                mt: 2.5,
+                flexDirection: { xs: "column", sm: "row" },
               }}
             >
-              <Box display="flex" gap={2}>
+              <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap", alignItems: "center" }}>
                 <Button
                   component={Link}
                   to={`/applicant/jobs/${job._id}`}
                   variant="outlined"
+                  sx={{
+                    minHeight: 48, px: 2.5, borderRadius: 2.5, borderColor: "#1D4ED8", borderWidth: 1.5,
+                    color: "#1D4ED8", fontWeight: 700, whiteSpace: "nowrap",
+                    transition: "background-color 160ms ease, transform 160ms ease",
+                    "&:hover": { borderColor: "#2563EB", backgroundColor: "#EFF6FF", transform: "translateY(-1px)" },
+                  }}
                 >
                   View Details
                 </Button>
@@ -155,6 +170,12 @@ const fetchJobs = async () => {
                   component={Link}
                   to={`/applicant/jobs/${job._id}/apply`}
                   variant="contained"
+                  sx={{
+                    minHeight: 48, px: 2.75, borderRadius: 2.5, bgcolor: "#2563EB", fontWeight: 700,
+                    whiteSpace: "nowrap", boxShadow: "0 4px 10px rgba(23, 59, 120, 0.22)",
+                    transition: "background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease",
+                    "&:hover": { bgcolor: "#1D4ED8", transform: "translateY(-1px)", boxShadow: "0 6px 14px rgba(23, 59, 120, 0.28)" },
+                  }}
                 >
                   Apply Now
                 </Button>
@@ -163,6 +184,8 @@ const fetchJobs = async () => {
               <IconButton
                 color="error"
                 onClick={() => toggleSaveJob(job._id)}
+                aria-label={savedJobs.includes(job._id) ? "Remove saved job" : "Save job"}
+                sx={{ alignSelf: { xs: "flex-end", sm: "center" }, ml: { sm: "auto" } }}
               >
                 {savedJobs.includes(job._id) ? (
                   <FavoriteIcon />
