@@ -29,10 +29,10 @@ const login = async (req, res) => {
       });
     }
 
-    if (user.role !== 'VENDOR') {
+    if (!['VENDOR', 'SUPER_ADMIN'].includes(user.role)) {
       return res.status(403).json({
         success: false,
-        message: 'Vendor access is required',
+        message: 'Admin or vendor access is required',
       });
     }
 
@@ -40,7 +40,7 @@ const login = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Vendor login successful',
+      message: `${user.role === 'SUPER_ADMIN' ? 'Admin' : 'Vendor'} login successful`,
       token,
       user: {
         id: user._id,

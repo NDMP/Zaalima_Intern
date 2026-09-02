@@ -13,7 +13,10 @@ const startServer = async () => {
       console.log(`Server running on port ${PORT}`);
     });
   } catch (error) {
-    console.error('Server startup failed: unable to connect to MongoDB');
+    console.error(`Server startup failed: ${error.message}`);
+    if (error.cause) {
+      console.error(`MongoDB error: ${error.cause.message}`);
+    }
     process.exit(1);
   }
 };
