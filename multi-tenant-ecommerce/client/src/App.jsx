@@ -1,7 +1,10 @@
 import { Link, Route, Routes } from 'react-router-dom';
 import Home from './pages/customer/Home';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AppRoutes from './routes/AppRoutes';
 
+
+export default App;
 const NotFound = () => (
 	<main className="center-page">
 		<p className="eyebrow">404</p>
